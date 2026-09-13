@@ -1,0 +1,14 @@
+{
+  "name": "pod-installation",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --experimental-vm-modules package-offline.mjs",
+    "start": "node preview.mjs",
+    "test": "node --experimental-vm-modules verify.mjs && node verify-installation.mjs && node verify-pipeline.mjs && node verify-ramp.mjs && node verify-review.mjs && node verify-film-lift.mjs && node verify-ladder.mjs && node verify-pipeline-visibility.mjs && node --experimental-vm-modules verify-offline.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

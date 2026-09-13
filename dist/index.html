@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="液冷机柜安装工序数字孪生：八道安装工序、三维设备与交互式作业注意事项。">
+<title>液冷机柜 · 安装工序数字孪生</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230d9488'/%3E%3Cpath d='M11 11h18v18H11zM11 17h18M11 23h18' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#192d3c;--muted:#748391;--accent:#008d83;--line:#e6ebef;--red:#e55165;--shadow:0 8px 32px #20344409,0 1px 3px #20344404;font-family:Inter,"Segoe UI","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);font-synthesis:none}*{box-sizing:border-box}body{margin:0;overflow:hidden;background:#edf2f5;font-size:14px}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible{outline:3px solid #35c9c0;outline-offset:4px}button:disabled{opacity:.3;cursor:default}button{border:0}svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}.mono{font-family:Consolas,"SFMono-Regular",monospace}.muted{color:var(--muted)}
+header{height:66px;background:#ffffffed;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:relative;z-index:5}.brand{display:flex;gap:13px;align-items:center}.brandmark{width:36px;height:36px;border-radius:10px;background:#008e84;color:white;display:grid;place-items:center}.brandmark svg{width:24px;height:24px}h1{font-size:19px;letter-spacing:.5px;font-weight:650;margin:0}.brand small{display:block;font-size:10px;letter-spacing:2.2px;margin-top:4px;color:var(--muted)}.header-right{display:flex;gap:22px;align-items:center;font-size:12px}.status{display:flex;align-items:center;gap:8px}.status:before{content:"";height:6px;width:6px;border-radius:50%;background:#12ac86;box-shadow:0 0 0 4px #12ac8610}.tag{border:1px solid #e3e9ed;border-radius:5px;padding:5px 8px;color:#778795;font-size:11px}.panel{background:#ffffffed;border:1px solid #ffffff;border-radius:12px;box-shadow:var(--shadow)}
+.timeline{position:absolute;left:20px;top:84px;width:250px;padding:22px 15px 16px;z-index:4}.panel-title{display:flex;align-items:center;justify-content:space-between;margin:0 7px 18px}.panel-title h2{font-size:15px;margin:0;font-weight:650}.panel-title span{font-size:11px;color:var(--muted);letter-spacing:.8px}.steps{list-style:none;padding:0;margin:0}.step{width:100%;display:flex;align-items:center;gap:13px;padding:12px 10px;text-align:left;background:transparent;border-radius:8px;position:relative;min-height:58px}.step:hover{background:#f4f7f8}.step:after{position:absolute;content:"";width:1px;height:12px;background:#e1e7ec;left:24px;bottom:-6px}.steps li:last-child .step:after{display:none}.step-number{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;border:1px solid #dce4e9;background:white;font-size:11px;color:#82919c;flex-shrink:0}.step strong{font-size:13px;font-weight:550;display:block}.step small{color:#98a3ac;font-size:10px;display:block;margin-top:5px;letter-spacing:.2px}.step.active{background:#e7f5f2;color:#007e75}.step.active .step-number{background:#008f83;color:white;border-color:#008f83;box-shadow:0 0 0 4px #008f830b}.step.active small{color:#56a79f}.step.done .step-number{color:#008f83;background:#eef9f5;border-color:#d5eee7}.risk-dot{margin-left:auto;width:5px;height:5px;border-radius:50%;background:#32bfc1;flex-shrink:0}.risk-dot.high{background:#ef7885}.timeline-footer{border-top:1px solid var(--line);padding:15px 8px 0;margin-top:14px;font-size:11px;color:#85939e;display:flex;justify-content:space-between}.timeline-footer b{color:#008f83;font-weight:500}
+#viewport{position:absolute;top:66px;bottom:0;left:280px;right:382px;overflow:hidden;transition:right .3s}body.details-hidden #viewport{right:20px}canvas{display:block;touch-action:none;width:100%;height:100%}.scene-title{position:absolute;top:27px;left:14px;pointer-events:none;z-index:2}.eyebrow{font-size:10px;letter-spacing:2px;color:#96a4ae;font-weight:500}.scene-title h2{font-size:15px;font-weight:500;margin:9px 0 7px}.scene-title p{color:#83939f;font-size:11px;margin:0}.scene-title .slash{color:#a7b2ba;margin:0 8px}.view-tools{position:absolute;right:12px;top:26px;display:flex;gap:5px;z-index:3}.square{background:#ffffffd9;width:34px;height:34px;border-radius:7px;box-shadow:0 2px 8px #20344405;display:grid;place-items:center}.square:hover{color:#008f83;background:white}.square svg{width:17px;height:17px}.scene-bottom{position:absolute;bottom:103px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;font-size:10px;color:#8a98a3;z-index:2}.axis{font-family:Consolas,monospace;display:flex;gap:12px}.axis b{font-size:11px;font-weight:400}.axis b:nth-child(1){color:#d67582}.axis b:nth-child(2){color:#6d9f91}.axis b:nth-child(3){color:#6695c0}.orbit-hint{margin-bottom:6px;color:#95a3ad;font-size:10px}
+.legend{position:absolute;bottom:28px;left:20px;width:250px;padding:17px 21px;z-index:3}.legend h3{font-size:11px;font-weight:500;color:#8a97a1;margin:0 0 14px;letter-spacing:1px}.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px 6px;font-size:11px;color:#637580}.swatch{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:8px}.legend-note{border-top:1px solid var(--line);margin-top:14px;padding-top:11px;font-size:10px;color:#a0abb3}
+.details{position:absolute;right:20px;top:84px;bottom:110px;width:356px;z-index:4;display:flex;flex-direction:column;overflow:hidden;transition:transform .3s,opacity .3s}body.details-hidden .details{transform:translateX(400px);opacity:0;pointer-events:none}.detail-top{padding:22px 23px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#85959e;letter-spacing:1px}.close{background:transparent;padding:0;color:#99a6b0;display:grid;place-items:center}.close svg{width:16px;height:16px}.detail-scroll{overflow:auto;padding:24px 23px 20px;scrollbar-width:thin;scrollbar-color:#dce5e9 transparent;flex:1}.detail-kicker{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.detail-kicker .mono{color:#008b81;font-size:12px;letter-spacing:1px}.badge{font-size:10px;border-radius:4px;padding:4px 7px;background:#e8f8f6;color:#008c83;letter-spacing:.3px}.badge.high{color:#d9586b;background:#fff0f2}.badge.medium{color:#b58a35;background:#fff8e8}.details h2{font-size:23px;letter-spacing:.5px;font-weight:600;margin:0 0 12px}.description{font-size:13px;line-height:1.9;color:#7c8b97;margin:0 0 23px}.section-heading{font-size:12px;font-weight:600;margin:0 0 13px;display:flex;align-items:center;gap:7px}.section-heading svg{width:15px;height:15px;color:#91a1ac}.params{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:26px}.param{padding:13px 12px;background:#f5f8fa;border:1px solid #edf1f4;border-radius:7px}.param small{display:block;color:#8b99a5;font-size:10px;margin-bottom:7px}.param strong{font-size:15px;font-weight:550}.param strong.long{font-size:12px}.notes{padding:0;list-style:none;margin:0;counter-reset:note}.notes li{position:relative;padding:12px 12px 12px 36px;line-height:1.8;font-size:12px;color:#657986;background:#f8fafb;border-radius:0 6px 6px 0;margin-bottom:9px;border-left:2px solid #dce9ec;counter-increment:note}.notes li:before{content:counter(note,decimal-leading-zero);position:absolute;left:11px;top:13px;color:#96a6b0;font-family:Consolas,monospace;font-size:10px}.notes li.critical{background:#fff8f8;border-left-color:#ed7080}.notes li.critical:before{color:#d67380}.source{margin:19px 0 0;font-size:10px;line-height:1.8;color:#9aa6b0}.detail-footer{padding:14px 23px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;font-size:11px;background:#fcfdfd}.complete{padding:8px 12px;border-radius:5px;color:#008a7e;background:#e8f5f1;font-size:11px}.complete:hover{background:#d6efe8}.restore{display:none;position:absolute;right:23px;top:88px;padding:10px 14px;background:white;border-radius:8px;z-index:5;box-shadow:var(--shadow)}body.details-hidden .restore{display:block}
+.controls{position:absolute;bottom:27px;left:calc(50% - 52px);transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #eef2f5;box-shadow:0 6px 30px #2034440a;border-radius:40px;padding:10px 15px;white-space:nowrap}.control-icon{display:grid;place-items:center;width:33px;height:33px;border-radius:50%;background:transparent;color:#6b7f8c}.control-icon:hover{background:#f0f6f5;color:#008e82}.control-icon svg{height:18px;width:18px}.play{display:flex;align-items:center;justify-content:center;gap:8px;border-radius:25px;background:#008e82;color:#fff;height:37px;padding:0 17px;font-size:12px;min-width:113px}.play svg{width:14px;height:14px}.progress{font-size:12px;letter-spacing:1px;margin:0 8px;color:#93a0aa}.progress b{color:#344d5c}.divider{height:22px;width:1px;background:#e7edf0;margin:0 4px}.toggle{display:flex;align-items:center;gap:7px;background:transparent;font-size:11px;color:#748591;padding:5px}.switch{height:14px;width:25px;background:#d8e1e6;border-radius:10px;position:relative}.switch:before{content:"";position:absolute;top:3px;left:3px;width:8px;height:8px;background:white;border-radius:50%;transition:transform .2s}.toggle[aria-pressed=true] .switch{background:#00988a}.toggle[aria-pressed=true] .switch:before{transform:translateX(11px)}.tour-bar{position:absolute;bottom:-1px;left:40px;right:40px;height:2px;overflow:hidden}.tour-bar div{height:100%;background:#27b9aa;width:0}.control-caption{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:9px;color:#a1aeb7;letter-spacing:1px;white-space:nowrap}
+#anchors{position:absolute;inset:0;pointer-events:none;overflow:hidden}.anchor{position:absolute;left:0;top:0;pointer-events:auto;transform:translate(-50%,-100%);display:flex;align-items:center;gap:6px;background:#ffffffed;border:1px solid #d7e5e8;box-shadow:0 3px 12px #10273618;border-radius:5px;padding:5px 8px 5px 5px;font-size:10px;white-space:nowrap;color:#397177;transition:opacity .2s;will-change:left,top}.anchor:after{content:"";position:absolute;top:100%;left:16px;height:25px;width:1px;background:#1db2b5a0}.anchor i{font-family:Consolas,monospace;font-style:normal;background:#e3f5f2;color:#079b97;padding:3px 4px;border-radius:3px;font-size:10px}.anchor.high i{background:#ffeeef;color:#e45c72}.anchor.high:after{background:#e97586a0}.anchor.selected{border-color:#139f99;z-index:3;box-shadow:0 0 0 3px #1ea29a15,0 3px 12px #10273612}.anchor.selected i{background:#00978a;color:white}.anchor:hover{z-index:5;border-color:#06968e}.anchor.faded{opacity:.6}.tooltip{position:fixed;z-index:20;pointer-events:none;width:250px;padding:15px 16px;border-radius:9px;background:#fff;box-shadow:0 8px 36px #152a3626;border:1px solid #e6ecef;display:none}.tooltip strong{font-size:13px}.tooltip p{font-size:12px;line-height:1.8;color:#71838f;margin:9px 0}.tooltip small{font-size:10px;color:#8e9ea8}.tooltip .badge{float:right}
+.loading{position:fixed;inset:0;background:#f4f7f9;z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .55s}.loading.loaded{opacity:0;pointer-events:none}.spinner{width:50px;height:50px;border:2px solid #dfebe9;border-top-color:#009688;border-radius:50%;animation:spin 1s linear infinite;margin-bottom:27px}@keyframes spin{to{transform:rotate(360deg)}}.loading h2{font-size:18px;font-weight:500;letter-spacing:1px;margin:0 0 12px}.loading p{font-size:12px;color:#8b9aa5}.loading-track{width:200px;height:3px;background:#e0e8ed;margin-top:15px;border-radius:3px;overflow:hidden}.loading-track div{height:100%;width:0;background:#009688;transition:width .25s}.loading .mono{font-size:12px;color:#008f82;margin-top:12px}#load-error{display:none;max-width:420px;text-align:center;line-height:1.8;padding:15px}#load-error button{padding:10px 20px;background:#008e82;color:white;border-radius:6px;margin-top:12px}.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#1c3945eb;color:white;padding:10px 18px;border-radius:8px;z-index:30;font-size:12px;opacity:0;pointer-events:none;transition:opacity .2s}.toast.show{opacity:1}
+.timeline{max-height:calc(100vh - 300px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#e1e9ed transparent}.anchor:after{height:calc(25px + var(--offset,0px))}body.details-hidden .details{visibility:hidden}.loading.loaded{visibility:hidden}
+@media(min-height:900px){.step{min-height:60px}.timeline{padding-top:25px}.detail-scroll{padding-top:27px}.notes li{font-size:13px}}@media(max-height:790px){.step{min-height:48px;padding:8px 10px}.step small{font-size:9px}.timeline{padding-top:16px;max-height:calc(100vh - 245px)}.panel-title{margin-bottom:10px}.legend{bottom:20px;padding:13px 20px}.legend-note{display:none}.detail-scroll{padding:17px 20px}.details{bottom:102px}.timeline-footer{padding-top:10px;margin-top:9px}}@media(max-height:660px){.timeline{bottom:100px;max-height:none;overflow:auto}.legend{display:none}.step{min-height:43px}.step small{display:none}}
+@media(max-width:1200px){.timeline{width:220px;left:14px}.details{width:310px;right:14px}#viewport{left:240px;right:330px}.legend{width:220px;left:14px}.controls{left:50%;gap:5px}.detail-scroll{padding:20px}.scene-title{left:5px}.scene-title p{max-width:220px;line-height:1.7}.header-right .tag{display:none}}
+@media(max-width:960px){.timeline,.legend{display:none}#viewport{left:0;right:325px}.controls{left:50%;bottom:20px}.scene-title{left:22px}.header-right .version{display:none}.scene-bottom{left:22px;bottom:95px}.details{top:84px}.control-caption{display:none}}
+@media(max-width:650px){header{height:64px;padding:0 16px}h1{font-size:15px;letter-spacing:0}.brand small{font-size:8px;letter-spacing:1.4px}.brandmark{width:31px;height:31px}.header-right{gap:0;font-size:10px}.status{gap:6px}.status:before{width:5px;height:5px}#viewport{left:0;right:0;top:64px;bottom:80px}.scene-title{top:20px;left:17px}.scene-title h2{font-size:13px}.scene-title p{font-size:10px}.details{top:auto;bottom:89px;right:12px;left:12px;width:auto;max-height:47vh}.detail-top{padding:12px 18px}.detail-scroll{padding:15px 18px}.details h2{font-size:20px}.description{font-size:12px}.detail-footer{padding:9px 18px}.controls{bottom:16px;max-width:calc(100% - 16px);gap:3px;padding:8px 10px}.play{font-size:11px;min-width:95px;padding:0 10px}.progress{margin:0 4px;font-size:11px}.toggle{font-size:0;gap:0;padding:6px}.toggle .switch{height:17px;width:29px}.toggle .switch:before{height:11px;width:11px}.toggle[aria-pressed=true] .switch:before{transform:translateX(12px)}.toggle:before{content:attr(data-short);font-size:10px;margin-right:5px}.divider{margin:0 2px}.control-icon{width:26px}.scene-bottom{bottom:14px}.orbit-hint{display:none}.restore{top:137px;right:15px;font-size:12px}.view-tools{right:15px;top:20px}body.details-hidden #viewport{right:0}.anchor{font-size:9px;padding:4px}.anchor i{font-size:9px}.toast{bottom:90px;max-width:90%;white-space:nowrap}}
+@media(max-width:380px){.controls{gap:0;padding:8px}.play{min-width:78px;font-size:10px}.progress{margin:0 3px;font-size:10px}.control-icon{width:24px}.controls .divider{display:none}.toggle{padding:4px}.toggle:before{font-size:9px;margin-right:3px}}
+.loading{transition:opacity .55s,visibility 0s .55s}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.spinner{animation-duration:3s}}
+/* 本次重建的参考图视觉：白底、灰白块体、蓝色工序标识。 */
+body{background:#fff}.panel{background:#fffffff5;border-color:#edf0f2;box-shadow:0 5px 23px #26394a07}header{background:#fff}.brandmark{background:#4778b5}.scene-title .eyebrow{color:#a9afb5}.scene-title h2{color:#60696f}.scene-title p{color:#a3a9ae}.controls{box-shadow:0 5px 23px #26394a09}.play{background:#487abb}.step.active{background:#eef4fa;color:#3d6ea8}.step.active .step-number{background:#507fb9;border-color:#507fb9}.step.active small{color:#7999bd}.timeline-footer b,.detail-kicker .mono{color:#4d7bb5}.toggle[aria-pressed=true] .switch{background:#6490c2}.complete{color:#4d77a7;background:#eef4fa}.anchor{border:0;border-radius:2px;box-shadow:none;background:#ffffffd9;color:#4775b6;padding:3px 4px;font-size:10px}.anchor i{background:#eef3fa;color:#4775b6}.anchor.high{color:#e85650}.anchor.high i{background:#fff0ee;color:#e85650}.anchor.selected{box-shadow:none;background:#eaf0f8;border:1px solid #b8cce2}.anchor.selected i{background:#4c7db8}.anchor:after{background:#8daacd}.anchor.high:after{background:#e5a6a2}.badge{color:#4776a9;background:#eff4fa}.badge.high{color:#d95650;background:#fff1ef}.scene-bottom{color:#a7afb4}.restore{border:1px solid #edf0f2;color:#61778e}.loading{background:#fff}
+ .speed{background:#f1f5f9;color:#52769b;border-radius:15px;padding:7px 8px;font-size:11px;min-width:36px}.action-status{position:absolute;left:calc(50% + 110px);transform:translateX(-50%);bottom:107px;z-index:3;display:flex;align-items:center;gap:10px;padding:10px 16px;background:#fffffff0;border:1px solid #e8edf2;border-radius:7px;font-size:12px;color:#607486;box-shadow:0 3px 14px #223c4c05;white-space:nowrap}.action-status .mono{font-size:10px;color:#9caab5;margin-left:10px}.action-dot{height:6px;width:6px;background:#5183bf;border-radius:50%}.details:not([hidden])~.action-status{max-width:70vw}.control-caption{font-size:9px}.step strong{font-size:12px}@media(max-width:960px){.action-status{left:50%;bottom:92px;max-width:95vw;font-size:11px}}@media(max-width:650px){.controls{gap:0;padding:8px}.controls .progress{margin:0 3px}.controls .toggle{padding:3px}.controls .toggle:before{display:none}.controls .divider{display:none}.action-status{white-space:normal;width:max-content;max-width:94vw;bottom:86px;font-size:10px;padding:8px 10px}.action-status .mono{display:none}.controls .play{min-width:86px;padding:0 9px}.speed{min-width:30px;padding:6px}.step strong{font-size:12px}}
+.model-info{border:1px solid #e6ebef;border-radius:14px;padding:25px;width:min(360px,calc(100vw - 32px));max-height:80vh;overflow:auto;box-shadow:0 20px 70px #192d3c30;color:var(--ink)}.model-info::backdrop{background:#192d3c35}.model-info h2{font-size:19px;margin:8px 0 22px}.model-info .info-close{float:right;background:#f1f5f6;border-radius:6px;padding:6px 10px}.model-info dl{margin:0}.model-info dt{font-size:11px;color:var(--muted);margin-top:15px}.model-info dd{margin:5px 0 0;font-size:14px;line-height:1.6}.model-info small{color:var(--muted)}
+.fix-detail{position:absolute;right:12px;bottom:148px;width:330px;max-width:calc(100% - 24px);background:white;border:1px solid #dae5e8;border-radius:12px;box-shadow:0 8px 30px #20344420;z-index:4;overflow:hidden;pointer-events:none}.fix-detail[hidden]{display:none}.fix-head{padding:11px 14px;font-size:12px;display:flex;justify-content:space-between}.fix-head small{color:#89969d;font-size:10px}#fix-view{height:180px;width:100%}.fix-gauges[hidden]{display:none}.fix-gauges{display:flex;gap:16px;padding:10px 14px}.fix-gauge{flex:1;font-size:10px;color:#75868f}.fix-gauge b{float:right;color:#168b7b;font:12px Consolas,monospace}.bubble-track{height:9px;border:1px solid #b5d0c9;background:#eef7f3;border-radius:8px;margin-top:7px;position:relative}.bubble-track:after{content:'';position:absolute;left:50%;top:-2px;height:11px;border-left:1px solid #859b96}.bubble-track i{position:absolute;left:50%;top:1px;width:16px;height:5px;border-radius:8px;background:#24b596;transform:translateX(-50%)}.fix-phase-row{display:flex;gap:6px;padding:0 12px 11px}.fix-phase-row span{flex:1;padding:7px 3px;text-align:center;border-radius:5px;background:#f0f3f5;color:#829097;font-size:10px}.fix-phase-row span[data-state=active]{background:#fff0d8;color:#ba781e}.fix-phase-row span[data-state=done]{background:#e5f5ed;color:#168b6f}#fix-action{padding:0 14px 12px;font-size:11px;color:#607985;min-height:16px}@media(max-height:700px){#fix-view{height:135px}.fix-detail{bottom:125px;width:290px}}
+.pipeline-board{position:absolute;left:14px;top:108px;z-index:4;width:238px;background:#fffffff2;border:1px solid #e2e9eb;border-radius:10px;padding:13px;box-shadow:0 5px 22px #20344412}.pipeline-board[hidden]{display:none}.pipeline-board h3{font-size:12px;margin:0 0 10px;display:flex;justify-content:space-between}.pipeline-board h3 button{font-size:10px;background:#eef5f3;border-radius:4px;padding:4px}.pipeline-row{width:100%;display:block;text-align:left;background:#f5f7f8;border:1px solid transparent;border-radius:6px;padding:9px;margin:5px 0}.pipeline-row.active{border-color:#008e83;background:#e7f5f1}.pipeline-row strong{font-size:12px}.pipeline-row span{float:right;font-size:10px;color:#168674}.pipeline-row small{display:block;font-size:10px;color:#829099;margin-top:5px}.pipeline-meter{height:3px;background:#e2e9eb;margin-top:7px;border-radius:3px;overflow:hidden}.pipeline-meter i{display:block;height:100%;background:#27ac95}.pipeline-resources{font-size:10px;color:#78888e;line-height:1.8;border-top:1px solid #e7ecef;margin-top:10px;padding-top:8px}.cabinet-tag{position:absolute;transform:translate(-50%,-100%);background:#fff;border:1px solid #91cfc3;padding:5px 7px;border-radius:5px;font-size:10px;pointer-events:auto;box-shadow:0 2px 8px #20344415}.cabinet-tag.active{background:#008e83;color:white}.pipeline-labels{position:absolute;inset:0;pointer-events:none;z-index:3}.pipeline-mode{border-radius:14px;background:#edf5f2;padding:7px 10px;font-size:11px;white-space:nowrap}@media(max-width:960px){.pipeline-board{top:92px;left:10px;width:190px;padding:9px}.pipeline-row{padding:7px}}@media(max-height:700px){.pipeline-board{top:90px}.pipeline-row{padding:6px;margin:3px 0}.pipeline-resources{line-height:1.4}}
+
+.method-switch{display:flex;gap:3px;background:#eef2f3;padding:4px;border-radius:8px}.method-switch button{padding:7px 12px;background:transparent;border-radius:5px;font-size:12px}.method-switch button[aria-pressed="true"]{background:#fff;color:#007e75;box-shadow:0 1px 5px #0001}
+body.ramp-mode #viewport{left:0;right:0}body.ramp-mode .timeline,body.ramp-mode .legend,body.ramp-mode .details,body.ramp-mode #restore,body.ramp-mode #pipeline-board,body.ramp-mode #pipeline-labels,body.ramp-mode #anchors,body.ramp-mode #fix-detail,body.ramp-mode .scene-title,body.ramp-mode .scene-bottom,body.ramp-mode #prev,body.ramp-mode #next,body.ramp-mode #pipeline-mode,body.ramp-mode .progress,body.ramp-mode #labels-toggle,body.ramp-mode #rotate-toggle{display:none!important}
+.ramp-summary{position:absolute;left:24px;top:92px;z-index:3;background:#fffffff0;border:1px solid #e4e8e8;border-radius:10px;padding:13px 18px;pointer-events:none}.ramp-summary[hidden]{display:none}.ramp-summary strong{font-size:14px}.ramp-summary p{margin:7px 0 0;color:#708089;font-size:11px}@media(max-width:800px){.header-right .tag,.header-right .status,.header-right .version{display:none}.method-switch button{padding:7px 8px}.ramp-summary{top:80px;left:10px}h1{font-size:14px}}
+
+.ramp-summary{pointer-events:auto;max-width:310px;max-height:calc(100vh - 190px);overflow:auto;scrollbar-width:thin}.ramp-summary label{display:block;margin-top:10px;font-size:12px}.ramp-summary input{width:105px;margin-left:6px;padding:5px;border:1px solid #cbd5dc;border-radius:4px}.ramp-summary button{margin-top:10px;background:#e8f3f0;padding:6px 10px;border-radius:5px;font-size:11px}.ramp-forces{font-size:11px;line-height:1.7;margin-top:9px;color:#596b77;border-top:1px solid #dde4e6;padding-top:8px}.ramp-overlay{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:hidden}.ramp-overlay svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.ramp-note{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;padding:3px 6px;border:1px solid #b5c6cd;background:#ffffffef;border-radius:4px;font-size:10px;color:#354e60;box-shadow:0 1px 4px #0001}.ramp-note.force{color:#bd594b;border-color:#e7b2a9}.ramp-note.dimension{color:#257778;border-color:#90bebe}body:not(.ramp-mode) .ramp-overlay{display:none}
+
+.seek-panel{position:absolute;left:50%;transform:translateX(-50%);bottom:90px;z-index:6;display:flex;align-items:center;gap:10px;padding:8px 15px;background:#fffffff5;border-radius:12px;box-shadow:0 2px 15px #233a3a0a;width:min(600px,90vw)}.seek-panel input{flex:1;min-width:60px;accent-color:#008e82;cursor:pointer}.seek-panel select{max-width:155px;font:inherit;font-size:11px;border:1px solid #dbe4e5;border-radius:5px;background:white;padding:5px;color:#50696b}.seek-panel output{font-size:10px;min-width:69px;color:#7a8c8e}.action-status{bottom:143px!important}.ramp-layers{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.ramp-layers button{padding:5px 8px;margin:0;background:#eef1f1}.ramp-layers button[aria-pressed=true]{background:#dcefe9;color:#176c5c}.ramp-force-inset{position:absolute;right:16px;bottom:193px;background:#ffffffee;border:1px solid #dce6e5;border-radius:9px;padding:12px;pointer-events:none;font-size:10px;line-height:1.7;color:#5b7377;width:155px}.ramp-force-inset strong{display:block;color:#387a78}.ramp-summary{max-height:calc(100vh - 250px)}@media(max-width:650px){.seek-panel{bottom:85px}.seek-panel select{max-width:106px}.ramp-force-inset{display:none}}
+body.ramp-install #ramp-overlay,body.ramp-install .ramp-summary{display:none!important}body.ramp-install #fix-detail{display:block!important}body.ramp-install #fix-detail[hidden]{display:none!important}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+</head>
+<body>
+<svg style="position:absolute;width:0;height:0" aria-hidden="true"><defs>
+<symbol id="i-rack" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M5 9h14M5 15h14M8 6h1M8 12h1M8 18h1M14 6h2M14 12h2M14 18h2"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol><symbol id="i-prev" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol><symbol id="i-next" viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z" fill="currentColor" stroke="none"/></symbol><symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="3"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"/></symbol><symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 12h16M12 4v16"/></symbol><symbol id="i-note" viewBox="0 0 24 24"><path d="M7 3h10v4H7zM7 5H4v16h16V5h-3M8 12h8M8 16h5"/></symbol><symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></symbol>
+</defs></svg>
+<header><div class="brand"><div class="brandmark"><svg><use href="#i-rack"/></svg></div><div><h1>液冷机柜安装工序数字孪生</h1><small>LIQUID COOLING · INSTALLATION TWIN</small></div></div><div class="header-right"><div class="method-switch" role="group" aria-label="搬运方案"><button id="method-lift" aria-pressed="true">升降机方案</button><button id="method-ramp" aria-pressed="false">人工斜坡方案</button></div><span class="tag mono">POD 01</span><span class="status" id="system-status">场景初始化</span><span class="version muted mono">SIMULATION / V1.0</span></div></header>
+<aside class="ramp-summary" id="ramp-summary" hidden><strong id="ramp-crew-title">人工斜坡搬运 · 10 人协同</strong><p id="ramp-crew-summary">6 人倒退牵引 · 2 人侧向扶稳 · 2 人后方推动</p><p>坡长 5.75 m · 净宽 2.2 m · 高差 0.8 m</p><p>坡度 8°（14.05%）· 水平投影 5.69 m</p><label>机柜重量<input id="ramp-mass" value="1620" type="number" min="1" max="100000" step="1" placeholder="待确认" aria-label="机柜实际搬运重量，千克"> kg</label><div class="ramp-forces" id="ramp-force-values">机柜重量待确认；受力箭头仅表示方向。</div><div class="ramp-layers"><button id="layer-person" aria-pressed="true">人员分工</button><button id="layer-dimension" aria-pressed="true">尺寸参数</button><button id="layer-force" aria-pressed="false">受力示意</button></div><button id="ramp-notes-toggle" aria-pressed="true">隐藏场景标注</button></aside><aside class="timeline panel" aria-label="安装工序"><div class="panel-title"><h2>安装工序</h2><span class="mono">WORKFLOW / 08</span></div><ol class="steps" id="steps"></ol><div class="timeline-footer"><span>演示检查进度</span><b id="completed-count">0 / 8 已完成</b></div></aside>
+<main id="viewport" aria-label="液冷机柜三维交互场景"><div class="ramp-overlay" id="ramp-overlay" hidden></div><div class="scene-title"><div class="eyebrow">DIGITAL TWIN WORKSPACE</div><h2>101 机房 <span class="slash">/</span> POD 01</h2><p>4 柜错峰 · 工位协作 · 八道工序</p></div><div class="view-tools"><button class="square" id="home" title="全景视角" aria-label="全景视角"><svg><use href="#i-home"/></svg></button><button class="square" id="fullscreen" title="全屏显示" aria-label="全屏显示"><svg><use href="#i-expand"/></svg></button></div><aside id="pipeline-board" class="pipeline-board" hidden><h3>并行施工看板 <button id="pipeline-labels-toggle" aria-pressed="true">柜号标签</button></h3><div id="pipeline-rows"></div><div id="pipeline-resources" class="pipeline-resources"></div></aside><div id="pipeline-labels" class="pipeline-labels"></div><div id="anchors" style="display:none"></div><aside id="fix-detail" class="fix-detail" hidden aria-label="机柜固定动作特写"><div class="fix-head"><strong id="fix-title">柜底动作特写</strong><small>结构剖视 · 同步动作</small></div><div id="fix-view"></div><div class="fix-gauges" id="fix-gauges"><div class="fix-gauge">水平角 <b id="fix-horizontal">0.000°</b><div class="bubble-track"><i id="fix-h-bubble"></i></div></div><div class="fix-gauge">垂直角 <b id="fix-vertical">90.000°</b><div class="bubble-track"><i id="fix-v-bubble"></i></div></div></div><div class="fix-phase-row"><span id="fix-phase-0">① 地脚着地</span><span id="fix-phase-1">② 调平</span><span id="fix-phase-2">③ 螺丝固定</span></div><div id="fix-action" aria-live="polite"></div></aside><div class="scene-bottom"><div><div class="orbit-hint">左键旋转 · 滚轮缩放 · 右键平移 · 双击模型查看信息</div><span class="mono" id="view-label">AXONOMETRIC · OVERVIEW</span></div><div class="axis"><b>X</b><b>Y</b><b>Z</b><span>单位 m</span></div></div></main>
+<aside class="legend panel"><h3>设备图例 <span class="mono" style="float:right">LEGEND</span></h3><div class="legend-grid"><span><i class="swatch" style="background:#b8bcbc"></i>计算机柜</span><span><i class="swatch" style="background:#c5dce9"></i>配电机柜</span><span><i class="swatch" style="background:#8baed1"></i>供回液管槽</span><span><i class="swatch" style="background:#ee9949"></i>搬运工装</span><span><i class="swatch" style="background:#ef625e"></i>高风险关注点</span><span><i class="swatch" style="background:#507fc4"></i>一般关注点</span></div><div class="legend-note">点击设备或工序标注，查看作业要点</div></aside>
+<aside class="details panel" id="details" aria-label="工序详情"><div class="detail-top"><span>工序详情 <span class="mono" style="margin-left:7px;color:#b0bbc3">PROCEDURE</span></span><button class="close" id="close-detail" aria-label="隐藏详情"><svg><use href="#i-close"/></svg></button></div><div class="detail-scroll" id="detail-content" aria-live="polite"></div><div class="detail-footer"><span id="detail-location" class="muted"></span><button class="complete" id="complete">标记已完成</button></div></aside>
+<button class="restore" id="restore"><svg style="width:15px;height:15px;margin-right:5px"><use href="#i-note"/></svg>工序详情</button>
+<div class="seek-panel"><select id="jump-action" aria-label="定位关键动作"></select><input id="seek-time" aria-label="施工演示进度" type="range" min="0" max="1000" value="0"><output id="seek-clock">00:00 / 00:00</output></div><nav class="controls" aria-label="演示控制"><button class="control-icon" id="prev" aria-label="上一工序" title="上一工序"><svg><use href="#i-prev"/></svg></button><button class="play" id="play" aria-label="播放施工演示"><svg><use href="#i-play"/></svg><span>施工演示</span></button><button class="control-icon" id="next" aria-label="下一工序" title="下一工序"><svg><use href="#i-next"/></svg></button><button class="control-icon" id="restart" aria-label="从头演示" title="从头演示">↺</button><button class="pipeline-mode" id="pipeline-mode">流水线模式</button><button id="speed" class="speed" title="切换演示速度" aria-label="切换演示速度">2×</button><div class="progress mono"><b id="current-number">01</b> / 08</div><span class="divider"></span><button class="toggle" id="labels-toggle" aria-pressed="false" data-short="标注" title="显示或隐藏工序标注"><span class="switch"></span>工序标注</button><button class="toggle" id="rotate-toggle" aria-pressed="false" data-short="旋转" title="开关自动旋转"><span class="switch"></span>自动旋转</button><div class="tour-bar"><div id="tour-progress"></div></div></nav>
+<div class="control-caption">施工动作与时长为示意 · 连接完成不代表已送电或已通过验收</div><div class="action-status" aria-live="polite"><span class="action-dot"></span><span id="action-label">准备沿搬运路径铺设散力板</span><span class="mono" id="action-counter">01 / 08</span></div><div class="tooltip" id="tooltip" role="tooltip"></div><div class="toast" id="toast" role="status"></div>
+<dialog id="model-info" class="model-info" aria-labelledby="model-info-title"><button type="button" class="info-close" id="close-model-info" aria-label="关闭模型信息">关闭</button><small>模型基本信息</small><h2 id="model-info-title"></h2><dl id="model-info-fields"></dl></dialog><div class="loading" id="loading"><div class="spinner" id="spinner"></div><h2>正在构建数字孪生场景</h2><p id="load-label">连接三维引擎</p><div class="loading-track"><div id="load-bar"></div></div><div class="mono" id="load-percent">0%</div><div id="load-error"><div id="error-message"></div><button onclick="location.reload()">重新加载</button></div></div>
+<script>
+// 模块请求失败时仍能显示可操作的错误状态。
+window.setLoadProgress=(value,label)=>{document.getElementById('load-bar').style.width=value+'%';document.getElementById('load-percent').textContent=value+'%';document.getElementById('load-label').textContent=label;};
+window.showLoadError=(message)=>{document.getElementById('loading').setAttribute('aria-hidden','false');document.getElementById('spinner').style.display='none';document.querySelector('.loading h2').textContent='场景暂时无法加载';document.getElementById('load-error').style.display='block';document.getElementById('error-message').textContent=message;document.getElementById('system-status').textContent='加载未完成';};
+window.loadWatchdog=setTimeout(()=>{if(!document.getElementById('loading').classList.contains('loaded'))showLoadError('三维引擎加载超时，请检查网络是否可以访问 cdn.jsdelivr.net，然后重试。');},45000);
+setLoadProgress(8,'连接三维引擎');
+</script>
+<script type="module">
+// 所有可编辑的作业内容、世界坐标和推荐镜头集中定义于此。
+// 参考图中的项目参数予以转录，未提供的承载、扭矩、压力不得自行填造。
+const STEPS = [
+ {name:'沿路径铺设散力板',en:'PREPARE TRANSPORT ROUTE',risk:'中',area:'走廊 · 搬运路径',duration:8000,desc:'仅演示散力板逐块铺设，不显示施工人员；室内铺板止于目标柜位前，柜位本身保持裸露。',params:[['铺设范围','起运点 → 柜位前'],['检查重点','承载 / 平整 / 接缝'],['工装','散力板'],['方案依据','按项目专项方案']],notes:[['确认机柜、地牛及人员总荷载满足地板与散力板承载要求，板材规格和铺设方式按专项方案执行。',true],['板缝平齐、无翘边，转弯和门口区域连续覆盖，保持搬运通道及垃圾通道畅通。',false]],summary:'先铺设连续散力板，再运输机柜。'},
+ {name:'4 人地牛搬运机柜',en:'PALLET JACK TRANSPORT',risk:'高',area:'走廊 → 机房门口',duration:18000,desc:'同一台带包装机柜由 4 名施工人员使用地牛，沿已铺散力板的路线运输，在走廊转角完成 90° 转向，正对机房门停稳。',params:[['施工人员','4 人'],['运输工装','地牛'],['路径','散力板通道'],['终点','走廊转角拆包区']],notes:[['核验地牛额定载荷、叉臂支承位置、轮组与制动状态，按设备要求固定机柜。',true],['4 人配合，一人控制地牛，其他人员辅助导向与监护；统一口令，低速转弯，禁止站入挤压区域。',true],['全程在已铺设的散力板上行进，在转角处面向机房门稳定停放，再降下地牛。',false]],summary:'4 人使用地牛，带包装机柜沿散力板运至走廊转角。'},
+ {name:'转角拆包及包装收集',en:'UNPACK & REMOVE WASTE',risk:'中',area:'走廊转角 · 面向机房门',duration:32000,desc:'外层为纸箱和底部栈板，内层为青蓝色塑料薄膜。机柜在走廊转角转向机房门后，先取下顶盖并向外放倒四侧纸板，再由下往上揭膜。纸箱与薄膜先装车，栈板留在原处；机柜推上升降机后再回收栈板，一并清运。',params:[['拆包位置','走廊转角，正对机房门'],['施工人员','4 人'],['包装去向','垃圾通道 → 投放区'],['包装结构','纸箱＋栈板 / 青蓝薄膜']],notes:[['稳定支承机柜后退出地牛，拆包时避开柜体、线缆和液冷接口，保留未连接接口的防尘帽。',true],['包装集中收拢后清运，垃圾通道与机柜运输通道分开，不把包装堆在升降机入口。',false],['检查外观、铭牌和附件，发现运输损伤先记录处理。',false]],summary:'先拆五面纸箱，再由下往上揭膜，纸箱和薄膜先装车，栈板等推柜上升降机后再回收。'},
+ {name:'4 人推柜上升降机',en:'LOAD HYDRAULIC PLATFORM',risk:'高',area:'机房入口 · 升降平台',duration:24000,desc:'4 名施工人员从机柜后方及两侧协同推行，将已拆包的机柜移至液压升降平台中心并停止。',params:[['施工人员','4 人'],['工具','液压升降机'],['动作','推入 / 对中 / 限位'],['平台位置','低位接载']],notes:[['确认平台额定载荷、接载坡板、制动与限位措施满足使用要求，机柜重心保持在支承范围内。',true],['缓慢推入，4 人按统一指令操作，避免在柜体与门柱、平台护栏之间停留。',true],['平台对中后停止推行并固定；人员走侧边踏步进入机房接应，不站上升降平台。',false]],summary:'机柜到平台中心后限位，人员进入机房接应，随后回收栈板并清运。'},
+ {name:'升降对接并推行落位',en:'LIFT & POSITION THE RACK',risk:'高',area:'升降机 → 静电地板 → 9 号柜位',duration:22000,desc:'升降机把机柜抬升至机房静电地板高度，完成平台对接后，由 4 名施工人员将机柜推入机房，沿通道移至 9 号目标柜位。',params:[['施工人员','4 人'],['对接高度','与静电地板齐平'],['目标柜位','9 号柜位'],['顺序','抬升 → 对接 → 推行']],notes:[['升降时人员在平台外监护，远离剪叉机构；平台达到静电地板高度并完成可靠对接后再推行。',true],['确认过渡板、平台锁止和地板承载条件，避免跨越未支承缝隙。',true],['4 人沿机房通道推行，核对目标柜号、柜门朝向及相邻间距，不以管路作为受力点。',false]],summary:'先升至地板高度，再由 4 人推行到 9 号柜位。'},
+ {name:'机柜固定及调平',en:'SECURE & LEVEL',risk:'中',area:'机房 · 9 号柜位',duration:36000,desc:'落位后由 2 名施工人员完成三段安装：四角承重地脚旋转着地、调节四脚高度校核水平与垂直度、安装前后短边的 4 颗 M12 固定螺丝。',params:[['施工人员','2 人'],['水平 / 垂直目标','≈ 0° / ≈ 90°'],['固定螺丝','M12 × 4'],['布置方式','前后短边各 2 颗']],notes:[['四角承重地脚旋转下降至地面，确认均匀承重，随后调节各脚高度。',true],['校核柜底水平接近 0°、柜体垂直接近 90°；动画角度为示意，现场按项目精度要求测量。',false],['调平完成后，在机柜底部范围内，前、后短边各安装 2 颗 M12 螺丝，螺丝中心距相邻两条柜边各 50 mm；紧固扭矩及锚固方式按设备和项目文件执行。',true]],summary:'2 人施工：四脚落地 → 调平 → 4 颗 M12 固定。'},
+ {name:'连接 6 根电源线',en:'CONNECT SIX POWER CABLES',risk:'高',area:'9 号柜 → 顶部工业连接器',duration:15000,desc:'按 A1、A2、A3、B1、B2、B3 顺序，将机柜的 6 根电源线分别接入顶部对应工业连接器。演示只展示插接，不表示已送电。',params:[['电源线数量','6 根'],['回路标识','A1–A3 / B1–B3'],['接入位置','顶部工业连接器'],['演示电气状态','未送电']],notes:[['由具备相应资质的人员在安全隔离条件下操作，核对回路、连接器规格及锁定状态。',true],['6 根线缆一一对应，不混接 A/B 路，按设计固定并保留合理余量，不在柜顶堆盘。',true],['顶部作业使用获准的登高平台和防护措施；插接完成仍须完成接地、绝缘及送电前验收。',false]],summary:'逐根连接 A1–A3、B1–B3，共 6 根，保持未送电。'},
+ {name:'连接二次侧与 Manifold',en:'CONNECT SECONDARY COOLING',risk:'高',area:'机柜后侧 · Manifold 接口',duration:13000,desc:'二次侧供回水管沿两列机柜之间布置，中心线位于透明玻璃地板下方 60 cm。两根软管从下方分别接入 机柜后侧左边 Manifold 最底部朝向地面的供水、回水接口，检查快接锁定。',params:[['管路中心标高','地板下 600 mm'],['接口数量','底部供回水各 1 个'],['接口朝向','垂直向下'],['后续检验','按方案检漏 / 保压']],notes:[['核对供回液标识，清洁接口并检查密封件；只在连接时取下防尘帽。',true],['软管保持合理弯曲半径，快接插入到位并核查锁定，不强拧接口或使软管受拉。',true],['完成连接后按获批方案检漏、保压和记录。画面流向粒子仅表示连接关系，不代表实际供液或试验合格。',false]],summary:'供液、回液分别接入机柜 Manifold，检查锁定。'}
+];
+
+// 参考图构图：保留 2–15 号设备；移除后排靠屏幕端的 1 号设备。
+const OVERVIEW={position:[-20,24,28],target:[-.55,.2,3.25],span:15.6};
+const RACK_LAYOUT=[
+ ...Array.from({length:7},(_,i)=>({id:i+2,x:-2.8+i*.615,z:-2.12,type:[4,7].includes(i+2)?'power':'compute'})),
+ ...Array.from({length:7},(_,i)=>({id:i+9,x:-2.8+i*.615,z:.50,type:[12,15].includes(i+9)?'power':'compute'}))
+];
+const STAGE_VIEWS=[
+ {anchors:[[-.6,-.68,8.4]],camera:[-17,19,26],target:[-.2,0,5.8],span:13.5},
+ {anchors:[[3,1.6,5.3]],camera:[-13,16,24],target:[-.5,.4,7.5],span:12},
+ {anchors:[[3,1.8,8.2],[-1,-.4,10.1]],camera:[-9,12,20],target:[2,.2,8.5],span:10},
+ {anchors:[[3,.55,3.95]],camera:[-7,10,14],target:[3,.4,4.3],span:8.2},
+ {anchors:[[3,.7,3.3],[-2.8,2.5,.5]],camera:[-12,15,18],target:[.2,.8,2.2],span:12},
+ {anchors:[[-2.8,.2,1.23]],camera:[-9,7,10],target:[-2.8,1,.5],span:6.5},
+ {anchors:[[-2.8,3.5,-.2]],camera:[-9,8,9],target:[-2.8,1.8,.5],span:7},
+ {anchors:[[-3.08,.25,-.26]],camera:[-9,7,-7],target:[-2.8,1.1,-.4],span:6.7}
+];
+STEPS.forEach((step,i)=>Object.assign(step,STAGE_VIEWS[i]));
+// 拆包分段时间与拆卸方向集中配置；按第三步时长归一化。
+// 管道中心线位于静电地板完成面下方 0.60 m；Manifold 仅底部两个向下接口。
+const HOT_AISLE={x0:-3.45,x1:1.32,z0:-1.42,z1:-.20,roof:2.38,bottom:-.80};
+const COOLING={floor:.016,height:-.60,xStart:-3.40,xEnd:1.12,lanes:[-1.10,-.86],portY:.16,portZ:-.76,portXs:[-.22,-.10]};
+const FIXING={ground:.016,feetEnd:.32,levelEnd:.68,boltStart:.70,tilt:.35,boltEdgeInset:.05,boltPoints:[[-.25,.65],[.25,.65],[-.25,-.65],[.25,-.65]],points:[[-.22,.54],[.22,.54],[-.22,-.54],[.22,-.54]]};
+const UNPACKING={palletHeight:.12,top:[.10,.24],sides:[.19,.43],film:[.46,.65],pallet:[.72,.88],collect:[.70,.90],haul:[.90,1],return:[.96,1],
+ layPositions:[[3,-.770,10.48],[3,-.770,6.09],[.55,-.770,8.20],[5.80,-.770,8.20],[6.60,-.73,10.10]]};
+const RECEIVING=[[1.70,1.70],[2.50,1.70],[3.30,1.70],[3.30,2.50]];
+const UNPACK_CREW=[[2.10,9.75],[1.95,6.65],[4.35,6.65],[1.0,6.30]];
+const WASTE_CART={enter:[0,.12],entry:[[-6,8.425],[-2,8.425]],park:[-2,8.425]};
+const MOTION={unpackZ:8.20,roadY:-.735,jackY:-.555,liftLow:-.60,floorY:.025,target:[-2.8,.50],
+ transport:[[-5,8.425],[3,8.425],[3,8.20]],
+ inside:[[3,3.95],[3,2.30],[1.8,2.30],[-2.8,2.30],[-2.8,.50]],
+ waste:[[-2,8.425],[-4.8,8.425],[-4.8,10.1],[-1,10.1]]};
+
+const CONFIG={pixelRatio:Math.min(window.devicePixelRatio,2),shadowSize:2048,cameraDuration:1400};
+const $=id=>document.getElementById(id), svg=id=>`<svg><use href="#i-${id}"/></svg>`;
+let current=0,playing=false,labelsVisible=false,autoRotate=false,completed=new Set(),tourElapsed=0,loaded=false,demoStarted=false,demoFinished=false,playbackRate=2;
+let THREE,OrbitControls,RoomEnvironment,renderer,scene,camera,controls,transition=null,clock,lastTime=0;
+let M,unitBox,cylinder,batches=new Map(),dummy;
+const anchors=[],anchorMarkers=[],flowPaths=[],selectables=[],racks=[];
+let installation=null;let pipeline=null;let ramp=null;let renderDirty=true;
+const riskClass=s=>s.risk==='高'?'high':s.risk==='中'?'medium':'';
+function renderUI(){
+ $('steps').innerHTML=STEPS.map((s,i)=>`<li><button class="step ${i===current?'active':''} ${completed.has(i)?'done':''}" data-step="${i}" aria-current="${i===current?'step':'false'}"><span class="step-number mono">${completed.has(i)?'✓':String(i+1).padStart(2,'0')}</span><span><strong>${s.name}</strong><small>${s.en}</small></span><i class="risk-dot ${riskClass(s)}"></i></button></li>`).join('');
+ const source=STEPS[current],slot=pipeline?.enabled?String(pipeline.contexts[pipeline.focus].slot):'9';const s={...source,desc:source.desc.replaceAll('9 号',slot+' 号'),params:source.params.map(([k,v])=>[k,v.replaceAll('9 号',slot+' 号')])};
+ $('detail-content').innerHTML=`<div class="detail-kicker"><span class="mono">STEP ${String(current+1).padStart(2,'0')}</span><span class="badge ${riskClass(s)}">${s.risk}风险</span></div><h2>${s.name}</h2><p class="description">${s.desc}</p><h3 class="section-heading">${svg('grid')}关键参数</h3><div class="params">${s.params.map(([k,v])=>`<div class="param"><small>${k}</small><strong class="mono ${v.length>10?'long':''}">${v}</strong></div>`).join('')}</div><h3 class="section-heading">${svg('note')}作业注意事项 <span class="muted mono" style="margin-left:auto;font-weight:400;font-size:10px">${String(s.notes.length).padStart(2,'0')} ITEMS</span></h3><ol class="notes">${s.notes.map(([v,k])=>`<li class="${k?'critical':''}">${v}</li>`).join('')}</ol><p class="source">内容依据：参考图 2 及流程补充。图示参数为项目参考值；本页用于工序演示，执行前以获批施工方案和设备安装文件为准。</p>`;
+ $('current-number').textContent=String(current+1).padStart(2,'0');$('detail-location').textContent=s.area;$('complete').textContent=completed.has(current)?'✓ 已完成 · 撤销':'标记已完成';$('completed-count').textContent=`${completed.size} / 8 已完成`;$('prev').disabled=current===0;$('next').disabled=current===STEPS.length-1;
+ anchors.forEach(a=>a.el.classList.toggle('selected',a.step===current));
+}
+function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),2400);}
+function selectStep(index,move=true,show=true){if(ramp?.enabled)return;if(pipeline?.enabled)stopPipeline();current=Math.max(0,Math.min(STEPS.length-1,index));tourElapsed=0;demoFinished=false;renderUI();$('detail-content').scrollTop=0;$('tooltip').style.display='none';if(show&&!playing)document.body.classList.remove('details-hidden');if(loaded){applyInstallation(current,0);if(move&&!playing){const step=STEPS[current];if([1,3,4].includes(current)){const focus=installation.hero.position.clone().add(new THREE.Vector3(0,1,0)),offset=new THREE.Vector3(...step.camera).sub(new THREE.Vector3(...step.target));moveCamera(focus.clone().add(offset).toArray(),focus.toArray(),step.span);}else moveCamera(step.camera,step.target,step.span);}}$('view-label').textContent=(playing?'FIXED VIEW · STEP ':'AXONOMETRIC · STEP ')+String(current+1).padStart(2,'0');}
+function setPlaying(value){renderDirty=true;playing=value;$('play').innerHTML=svg(value?'pause':'play')+'<span>'+(value?'暂停演示':demoFinished?'重新演示':demoStarted?'继续演示':'施工演示')+'</span>';$('play').setAttribute('aria-label',value?'暂停施工演示':'播放施工演示');$('play').setAttribute('aria-pressed',String(value));if(controls){controls.autoRotate=value?false:autoRotate;controls.enabled=!value;}if(value){transition=null;document.body.classList.add('details-hidden');}$('home').disabled=value;$('rotate-toggle').disabled=value;$('view-label').textContent=(value?'FIXED VIEW · STEP ':'AXONOMETRIC · STEP ')+String(current+1).padStart(2,'0');}
+function restartDemo(){if(!loaded)return;if(ramp?.enabled){ramp.time=0;renderRampFlow(0);demoFinished=false;demoStarted=true;setPlaying(true);return;}if(pipeline?.enabled){startPipeline();setPlaying(true);return;}completed.clear();demoStarted=true;demoFinished=false;selectStep(0,false,false);setPlaying(true);}
+$('steps').addEventListener('click',e=>{const b=e.target.closest('[data-step]');if(b){setPlaying(false);demoStarted=true;selectStep(Number(b.dataset.step));}});
+$('prev').onclick=()=>{setPlaying(false);demoStarted=true;selectStep(current-1);};$('next').onclick=()=>{setPlaying(false);demoStarted=true;selectStep(current+1);};
+$('play').onclick=()=>{if(!loaded)return;if(playing)setPlaying(false);else if(!demoStarted||demoFinished)restartDemo();else setPlaying(true);};
+$('restart').onclick=restartDemo;
+$('pipeline-mode').onclick=()=>{if(!loaded)return;setPlaying(false);if(pipeline?.enabled){stopPipeline();selectStep(0,false);}else{startPipeline();setPlaying(true);}};
+$('pipeline-labels-toggle').onclick=()=>{if(!pipeline)return;pipeline.labels=!pipeline.labels;$('pipeline-labels-toggle').setAttribute('aria-pressed',pipeline.labels);updatePipelineLabels();};
+for(const kind of ['person','dimension','force'])$('layer-'+kind).onclick=()=>{if(!ramp)return;ramp.layers[kind]=!ramp.layers[kind];$('layer-'+kind).setAttribute('aria-pressed',ramp.layers[kind]);renderDirty=true;};
+document.addEventListener('click',()=>{renderDirty=true;},true);document.addEventListener('input',()=>{renderDirty=true;},true);
+$('seek-time').oninput=()=>seekDemo(Number($('seek-time').value)/1000*demoLength());
+$('jump-action').onchange=()=>seekDemo(Number($('jump-action').value));
+$('ramp-mass').oninput=()=>{if(ramp)updateRampForceText();};
+$('ramp-notes-toggle').onclick=()=>{if(!ramp)return;ramp.annotationsVisible=!ramp.annotationsVisible;$('ramp-notes-toggle').setAttribute('aria-pressed',ramp.annotationsVisible);$('ramp-notes-toggle').textContent=ramp.annotationsVisible?'隐藏场景标注':'显示场景标注';};
+$('method-ramp').onclick=()=>switchTransport(true);
+$('method-lift').onclick=()=>switchTransport(false);
+$('speed').onclick=()=>{playbackRate=playbackRate===1?1.5:playbackRate===1.5?2:1;$('speed').textContent=playbackRate+'×';};
+
+$('complete').onclick=()=>{completed.has(current)?completed.delete(current):completed.add(current);renderUI();};
+$('close-detail').onclick=()=>document.body.classList.add('details-hidden');$('restore').onclick=()=>document.body.classList.remove('details-hidden');
+$('labels-toggle').onclick=()=>{labelsVisible=!labelsVisible;$('labels-toggle').setAttribute('aria-pressed',labelsVisible);$('anchors').style.display=labelsVisible?'':'none';$('tooltip').style.display='none';anchorMarkers.forEach(p=>p.group.visible=labelsVisible);};
+$('rotate-toggle').onclick=()=>{autoRotate=!autoRotate;$('rotate-toggle').setAttribute('aria-pressed',autoRotate);if(controls)controls.autoRotate=autoRotate&&!transition&&!playing;};
+$('home').onclick=()=>{if(ramp?.enabled){rampCamera();return;}if(loaded){moveCamera(OVERVIEW.position,OVERVIEW.target,OVERVIEW.span);$('view-label').textContent='AXONOMETRIC · OVERVIEW';}};
+$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{toast('当前窗口不支持全屏，请使用浏览器全屏功能');}};
+document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(e.key==='Escape')document.body.classList.add('details-hidden');if(e.key==='ArrowRight')selectStep(current+1);if(e.key==='ArrowLeft')selectStep(current-1);});
+// 初始优先展示参考图完整构图；点击工序后展开详情。
+document.body.classList.add('details-hidden');
+renderUI();
+
+try {
+ [THREE,{OrbitControls},{RoomEnvironment}]=await Promise.all([import('three'),import('three/addons/controls/OrbitControls.js'),import('three/addons/environments/RoomEnvironment.js')]);
+ setLoadProgress(25,'创建灯光、环境与材质');
+ await new Promise(r=>requestAnimationFrame(r));
+ initScene();buildEnvironment();setLoadProgress(46,'搭建机房与搬运通道');
+ await new Promise(r=>requestAnimationFrame(r));
+ buildEquipment();registerModelInfo();initFixingDetail();setLoadProgress(76,'布置编号机柜、搬运工位和散力板');
+ await new Promise(r=>requestAnimationFrame(r));
+ buildAnchors();bindSceneInteraction();applyInstallation(0,0);initPipeline();startPipeline();setLoadProgress(90,'准备工序标注与推荐视角');
+ await renderer.compileAsync(scene,camera);
+ renderer.render(scene,camera);renderer.shadowMap.autoUpdate=true;loaded=true;clearTimeout(window.loadWatchdog);setLoadProgress(100,'场景已就绪');$('system-status').textContent='演示场景就绪';
+ setTimeout(()=>{$('loading').classList.add('loaded');$('loading').setAttribute('aria-hidden','true');},320);requestAnimationFrame(animate);
+}catch(error){console.error(error);clearTimeout(window.loadWatchdog);showLoadError('请检查网络与浏览器 WebGL 支持。错误：'+error.message);}
+
+// 共享几何体和材质；高频重复零件使用 InstancedMesh 合并渲染。
+function initScene(){
+ scene=new THREE.Scene();scene.background=new THREE.Color('#ffffff');
+ camera=new THREE.OrthographicCamera(-10,10,8,-8,.1,120);camera.position.fromArray(OVERVIEW.position);camera.userData.span=OVERVIEW.span;
+ renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(CONFIG.pixelRatio);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;renderer.outputColorSpace=THREE.SRGBColorSpace;
+ renderer.domElement.setAttribute('aria-label','可旋转与缩放的液冷机柜三维场景');renderer.domElement.setAttribute('role','img');$('viewport').prepend(renderer.domElement);
+ const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;scene.environmentIntensity=.28;room.dispose();pmrem.dispose();
+ controls=new OrbitControls(camera,renderer.domElement);controls.target.fromArray(OVERVIEW.target);controls.addEventListener('change',()=>{renderDirty=true;});controls.enableDamping=true;controls.dampingFactor=.07;controls.minDistance=3;controls.maxDistance=70;controls.minZoom=.45;controls.maxZoom=3.5;controls.maxPolarAngle=Math.PI*.49;controls.autoRotate=autoRotate;controls.autoRotateSpeed=.12;controls.update();
+ controls.addEventListener('start',()=>{transition=null;controls.autoRotate=false;if(playing)setPlaying(false);$('tooltip').style.display='none';});controls.addEventListener('end',()=>{controls.autoRotate=autoRotate&&!playing;});
+ // 参考图使用中性白光和低对比度漫反射，不使用彩色补光。
+ scene.add(new THREE.HemisphereLight('#ffffff','#b9b9b6',1.9));
+ const sun=new THREE.DirectionalLight('#ffffff',2.3);sun.position.set(8,15,7);sun.castShadow=true;sun.shadow.mapSize.set(CONFIG.shadowSize,CONFIG.shadowSize);Object.assign(sun.shadow.camera,{left:-16,right:16,top:16,bottom:-16,near:1,far:60});sun.shadow.normalBias=.02;sun.shadow.bias=-.0001;sun.shadow.radius=4;scene.add(sun);
+ const fill=new THREE.DirectionalLight('#ffffff',.24);fill.position.set(-5,8,-8);scene.add(fill);
+ unitBox=new THREE.BoxGeometry(1,1,1);cylinder=new THREE.CylinderGeometry(1,1,1,10);dummy=new THREE.Object3D();
+ const material=(color,roughness=.86)=>new THREE.MeshStandardMaterial({color,metalness:0,roughness});
+ M={body:material('#d7d9d8'),front:material('#eeeFef'),side:material('#9fa2a1'),top:material('#bfc3c3'),pale:material('#d5e4ed'),paleTop:material('#c2d7e5'),floor:material('#fafbf9'),base:material('#e6e9e7'),road:material('#aeafac'),steel:material('#9b9d99'),black:material('#454946'),orange:material('#f39943'),board:material('#fff0a1'),interiorBoard:material('#946747'),worker:material('#b7b9b8'),helmet:material('#f4c525'),packing:material('#e7b688'),packingTop:material('#f2c698'),wood:material('#ba9061'),film:new THREE.MeshStandardMaterial({color:'#26adc4',roughness:.34,metalness:0,transparent:true,opacity:.66,depthWrite:false,side:THREE.DoubleSide}),landing:material('#d7c1a9'),blue:material('#457cca'),supply:material('#719dcc'),return:material('#efba94'),white:material('#ffffff'),ground:material('#a6aa70'),cyan:material('#a1c4d3'),led:material('#b4c3bd')};
+
+ new ResizeObserver(resize).observe($('viewport'));resize();
+ renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();setPlaying(false);$('loading').classList.remove('loaded');showLoadError('三维图形上下文已丢失，请关闭占用较高的页面后重新加载。');});
+}
+function resize(){renderDirty=true;if(!renderer)return;const r=$('viewport').getBoundingClientRect();renderer.setSize(r.width,r.height);const aspect=r.width/r.height,span=camera.userData.span||OVERVIEW.span;camera.left=-span*aspect/2;camera.right=span*aspect/2;camera.top=span/2;camera.bottom=-span/2;if(aspect<.85){camera.left=-span*.85/2;camera.right=span*.85/2;camera.top=span*.85/aspect/2;camera.bottom=-camera.top;}camera.updateProjectionMatrix();}
+function box(parent,w,h,d,x,y,z,mat,cast=true){const mesh=new THREE.Mesh(unitBox,mat);mesh.scale.set(w,h,d);mesh.position.set(x,y,z);mesh.castShadow=cast;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
+function rod(parent,a,b,r,mat){const v1=new THREE.Vector3(...a),v2=new THREE.Vector3(...b),delta=v2.clone().sub(v1),mesh=new THREE.Mesh(cylinder,mat);mesh.scale.set(r,delta.length(),r);mesh.position.copy(v1).add(v2).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize());mesh.castShadow=true;parent.add(mesh);return mesh;}
+function batchBox(w,h,d,x,y,z,mat){if(!batches.has(mat))batches.set(mat,[]);dummy.position.set(x,y,z);dummy.rotation.set(0,0,0);dummy.scale.set(w,h,d);dummy.updateMatrix();batches.get(mat).push(dummy.matrix.clone());}
+function flushBatches(){for(const[mat,matrices]of batches){const mesh=new THREE.InstancedMesh(unitBox,mat,matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.castShadow=false;mesh.receiveShadow=true;scene.add(mesh);}batches.clear();}
+function pipe(parent,points,radius,mat,flow=false){const curve=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)),false,'centripetal');const mesh=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(12,points.length*8),radius,8,false),mat);mesh.castShadow=true;parent.add(mesh);if(flow)flowPaths.push(curve);return mesh;}
+function textLabel(text,x,y,z,width=1.5,color='#a2bac8',floor=false){const c=document.createElement('canvas');c.width=512;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle=color;ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='500 40px "Segoe UI", "Microsoft YaHei", sans-serif';ctx.fillText(text,256,64);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const m=new THREE.Mesh(new THREE.PlaneGeometry(width,width/4),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,side:THREE.DoubleSide}));m.position.set(x,y,z);if(floor)m.rotation.x=-Math.PI/2;scene.add(m);return m;}
+// 模型是依据参考图片建立的空间示意，不添加图片中不存在的机房围墙、灯带或桥架。
+function modelVisible(object){for(let node=object;node;node=node.parent)if(!node.visible)return false;return true;}
+function buildEnvironment(){
+ // 白色高地台：x[-4.8,4]、z[-4,3]，前侧厚实立面。
+ // 地台分块形成真实管沟，玻璃下方不保留遮挡管路的实体地板。
+ const A=HOT_AISLE,slab=(x0,x1,z0,z1)=>{const m=box(scene,x1-x0,.82,z1-z0,(x0+x1)/2,-.41,(z0+z1)/2,M.base);m.name='raised-floor-solid';};
+ slab(-4.8,A.x0,-4,3);slab(A.x1,4,-4,3);slab(A.x0,A.x1,-4,A.z0);slab(A.x0,A.x1,A.z1,3);
+ const floor=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),M.floor,16*12*4);floor.name='antistatic-floor';let n=0;
+ const tile=(x0,x1,z0,z1)=>{if(x1-x0<.001||z1-z0<.001)return;dummy.position.set((x0+x1)/2,.009,(z0+z1)/2);dummy.rotation.set(0,0,0);dummy.scale.set(x1-x0,.014,z1-z0);dummy.updateMatrix();floor.setMatrixAt(n++,dummy.matrix);};
+ for(let x=0;x<16;x++)for(let z=0;z<12;z++){const cx=-4.525+x*.55,cz=-3.725+z*.55,x0=cx-.2745,x1=cx+.2745,z0=cz-.2745,z1=cz+.2745;
+  if(x1<=A.x0||x0>=A.x1||z1<=A.z0||z0>=A.z1)tile(x0,x1,z0,z1);
+  else{tile(x0,Math.min(x1,A.x0),z0,z1);tile(Math.max(x0,A.x1),x1,z0,z1);tile(Math.max(x0,A.x0),Math.min(x1,A.x1),z0,Math.min(z1,A.z0));tile(Math.max(x0,A.x0),Math.min(x1,A.x1),Math.max(z0,A.z1),z1);}
+ }floor.count=n;floor.receiveShadow=true;scene.add(floor);
+ buildHotAisle();
+ box(scene,8.8,.016,.4,-.4,.008,2.8,M.floor);
+ // 右侧纵向运输通道和底部横向走廊。两者与白地台分离，保持原图留白。
+ const corridorTurn=box(scene,1.60,.055,4.65,3,-.8175,5.325,M.road);corridorTurn.name="cabinet-route-turn";
+ const corridorStraight=box(scene,9.80,.055,1.55,-1.1,-.8175,8.425,M.road);corridorStraight.name="cabinet-route-straight";
+ // 地台上的棕色过渡铺板及边缘短坡道。
+ // 室内铺板由搬运轨迹生成，避免与整片过渡板重叠。
+ // 此处由可升降平台完成高差转换，不再使用固定斜坡。
+
+ // 机柜落位区旁的细条形地板格栅。
+ // 已删除参考截图红圈内的地板格栅。
+ // 参考图中门洞只保留两根立柱，不画横梁或隔墙。
+ for(const x of[2.0,4.0])box(scene,.065,2.8,.10,x,1.4,3.0,M.steel);
+ // 灰色独立垃圾通道及投放区，包装清运沿此路线移动。
+ // 不再建立额外的垃圾通道地面。
+ 
+ 
+
+ 
+ // 机房内不放置箭头和地面文字；保留室外垃圾通道方向箭头。
+ 
+ 
+ 
+
+ 
+ // 左侧供回液槽：淡橙/淡蓝管路落入白色支撑槽，避免高饱和发光效果。
+ // 白色背景接收柔和投影；接触阴影用径向透明纹理辅助，材质不描边。
+ box(scene,200,.04,200,0,-.88,0,M.white,false);
+ contactShadow(-.4,-.850,-.5,10.6,8.7,.12);
+}
+function buildHotAisle(){
+ const A=HOT_AISLE,g=new THREE.Group();g.name='enclosed-hot-aisle';scene.add(g);scene.userData.hotAisle=g;
+ const glass=new THREE.MeshStandardMaterial({color:'#bee1e6',roughness:.14,metalness:.05,transparent:true,opacity:.19,depthWrite:false,side:THREE.DoubleSide});
+ const cover=glass.clone();cover.opacity=.075;
+ // 玻璃地板标高与静电地板齐平；靠机柜端预留软管穿板服务带。
+ for(let i=0;i<7;i++){const w=(A.x1-A.x0)/7,x=A.x0+(i+.5)*w;
+  const pane=box(g,w-.014,.025,A.z1-A.z0-.20,x,COOLING.floor-.0125,(A.z0+A.z1-.20)/2,glass,false);pane.name='transparent-glass-floor';
+  box(g,.012,.025,A.z1-A.z0-.20,A.x0+i*w,COOLING.floor-.0125,(A.z0+A.z1-.20)/2,M.steel,false);
+ }
+ for(const z of[A.z0,A.z1-.20])box(g,A.x1-A.x0,.025,.018,(A.x0+A.x1)/2,COOLING.floor-.0125,z,M.steel,false);
+ // 服务带玻璃在两个接管坐标留孔，软管不穿过实体玻璃。
+ const cuts=[A.x0,...Array.from({length:4},(_,i)=>[-3.07+i*.615,-2.97+i*.615,-2.95+i*.615,-2.85+i*.615]).flat(),A.x1];for(let i=0;i<cuts.length-1;i+=2)box(g,cuts[i+1]-cuts[i]-.008,.025,.182,(cuts[i]+cuts[i+1])/2,COOLING.floor-.0125,A.z1-.10,glass,false);
+ box(g,A.x1-A.x0,.025,A.z1-A.z0,(A.x0+A.x1)/2,A.bottom-.0125,(A.z0+A.z1)/2,M.side,false).name='pipe-trench-bottom';
+ // 两端透明门、顶部透明封板及框架；两侧由机柜背面界定热通道。
+ for(const x of[-3.20,1.27]){
+  for(const z of[A.z0+.02,A.z1-.02])box(g,.034,A.roof,.034,x,A.roof/2,z,M.steel);
+  box(g,.034,.034,A.z1-A.z0,x,A.roof,(A.z0+A.z1)/2,M.steel);
+  for(const z of[-1.115,-.505]){box(g,.012,2.27,.565,x,1.16,z,cover,false).name='hot-aisle-glass-door';rod(g,[x-.025,.96,z],[x-.025,1.16,z],.01,M.steel);}
+ }
+ for(const z of[A.z0,A.z1]){box(g,4.47,.035,.035,-.965,A.roof,z,M.steel);box(g,4.47,.11,.012,-.965,2.305,z,cover,false);}
+ box(g,4.47,.012,A.z1-A.z0,-.965,A.roof+.012,(A.z0+A.z1)/2,cover,false).name='hot-aisle-glass-roof';
+}
+function groundArrow(x,y,z,length,angle=0){
+ const shape=new THREE.Shape();shape.moveTo(-length/2,-.08);shape.lineTo(length*.20,-.08);shape.lineTo(length*.20,-.22);shape.lineTo(length/2,0);shape.lineTo(length*.20,.22);shape.lineTo(length*.20,.08);shape.lineTo(-length/2,.08);shape.closePath();
+ const mesh=new THREE.Mesh(new THREE.ShapeGeometry(shape),new THREE.MeshBasicMaterial({color:'#407dcb',side:THREE.DoubleSide}));mesh.rotation.x=-Math.PI/2;mesh.rotation.z=angle;mesh.position.set(x,y,z);scene.add(mesh);
+}
+function curvedArrow(x,y,z,r,rotation){
+ const g=new THREE.Group();g.position.set(x,y,z);g.rotation.y=rotation;scene.add(g);
+ const points=[];for(let i=0;i<=16;i++){const a=-1.2+i/16*1.9;points.push(new THREE.Vector3(Math.cos(a)*r,0,Math.sin(a)*r));}
+ const left=[],right=[];for(let i=0;i<points.length;i++){const a=-1.2+i/16*1.9;left.push(new THREE.Vector3(Math.cos(a)*(r-.045),0,Math.sin(a)*(r-.045)));right.push(new THREE.Vector3(Math.cos(a)*(r+.045),0,Math.sin(a)*(r+.045)));}
+ const positions=[];for(let i=0;i<16;i++){[left[i],right[i],left[i+1],right[i],right[i+1],left[i+1]].forEach(v=>positions.push(...v));}const p=points[16],dir=new THREE.Vector3(-Math.sin(.7),0,Math.cos(.7));positions.push(...p.clone().addScaledVector(dir,.19),...left[16].clone().add(new THREE.Vector3(-.1,0,-.06)),...right[16].clone().add(new THREE.Vector3(.1,0,.06)));
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.computeVertexNormals();g.add(new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:'#5384c4',side:THREE.DoubleSide})));
+}
+function contactShadow(x,y,z,width,depth,opacity=.17){
+ const canvas=document.createElement('canvas');canvas.width=128;canvas.height=128;const ctx=canvas.getContext('2d'),gradient=ctx.createRadialGradient(64,64,10,64,64,64);gradient.addColorStop(0,'rgba(58,65,64,'+opacity+')');gradient.addColorStop(.5,'rgba(58,65,64,'+(opacity*.65)+')');gradient.addColorStop(1,'rgba(58,65,64,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);
+ const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,depth),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(canvas),transparent:true,depthWrite:false}));mesh.rotation.x=-Math.PI/2;mesh.position.set(x,y,z);scene.add(mesh);
+}
+function makeRack(x,z,id,type='compute',y=0,clickStep=6){
+ const g=new THREE.Group();g.position.set(x,y,z);g.userData.step=clickStep;g.userData.referenceId=id;scene.add(g);selectables.push(g);racks.push(g);
+ // 与参考图一致：完整封闭的柜门、窄拼缝、平整顶面，不显示服务器抽屉与发光边框。
+ const pale=type==='power';box(g,.6,2.17,1.4,0,1.165,0,pale?M.pale:M.body);
+ box(g,.590,2.146,.012,0,1.164,.706,pale?M.pale:M.front);
+ box(g,.009,2.165,1.394,-.304,1.164,0,pale?M.pale:M.side);
+ box(g,.6,.012,1.4,0,2.252,0,pale?M.paleTop:M.top);
+ // 隐藏在柜底和柜后的小型脚座/接口保留设备含义，不改变参考图的简洁轮廓。
+ if(id!==9)for(const dx of[-.22,.22])for(const dz of[-.53,.53])box(g,.065,.035,.065,dx,.02,dz,M.steel);
+ if(type==='cdu'){for(const dx of[-.15,.15])pipe(g,[[dx,.16,-.72],[dx,1.85,-.72]],.019,dx<0?M.supply:M.return);}
+ if(id){const label=textLabel(String(id),x,y+2.267,z,.43,pale?'#273746':'#ff2929',true);label.rotation.z=-Math.PI/2;g.attach(label);}
+ if(id!==9)contactShadow(x,y+.003,z,.95,1.73,.15);
+ return g;
+}
+// 连续施工引擎：所有阶段共享同一台机柜；纯状态采样允许暂停、继续与直接跳步。
+function clamp01(v){return Math.max(0,Math.min(1,v));}
+function smooth(v){v=clamp01(v);return v*v*(3-2*v);}
+function blend(a,b,t){return a+(b-a)*t;}
+function routeSample(points,p){
+ points=points.filter((point,i)=>i===0||Math.hypot(point[0]-points[i-1][0],point[1]-points[i-1][1])>1e-8);
+ if(points.length===1)return{x:points[0][0],z:points[0][1],yaw:0};
+ const lengths=points.slice(1).map((v,i)=>Math.hypot(v[0]-points[i][0],v[1]-points[i][1]));const total=lengths.reduce((a,b)=>a+b,0);let distance=clamp01(p)*total;
+ for(let i=0;i<lengths.length;i++){if(distance<=lengths[i]||i===lengths.length-1){const a=points[i],b=points[i+1],t=clamp01(distance/lengths[i]);let dx=b[0]-a[0],dz=b[1]-a[1];const size=Math.hypot(dx,dz);dx/=size;dz/=size;if(i<lengths.length-1&&t>.72){const c=points[i+2],nx=c[0]-b[0],nz=c[1]-b[1],ns=Math.hypot(nx,nz),f=smooth((t-.72)/.28);dx=blend(dx,nx/ns,f);dz=blend(dz,nz/ns,f);}return{x:blend(a[0],b[0],t),z:blend(a[1],b[1],t),yaw:Math.atan2(-dx,-dz)};}distance-=lengths[i];}
+}
+function orthogonalSample(points,p){
+ const parts=[];for(let i=0;i<points.length-1;i++){const a=points[i],b=points[i+1],yaw=Math.atan2(a[0]-b[0],a[1]-b[1]);parts.push({a,b,yaw,length:Math.hypot(b[0]-a[0],b[1]-a[1])});if(i<points.length-2){const c=points[i+2],next=Math.atan2(b[0]-c[0],b[1]-c[1]);parts.push({a:b,b,yaw,next,length:1.15});}}
+ let d=clamp01(p)*parts.reduce((n,v)=>n+v.length,0);for(const part of parts){if(d<=part.length||part===parts.at(-1)){const t=clamp01(d/part.length),delta=part.next===undefined?0:Math.atan2(Math.sin(part.next-part.yaw),Math.cos(part.next-part.yaw));return {x:blend(part.a[0],part.b[0],t),z:blend(part.a[1],part.b[1],t),yaw:part.yaw+delta*smooth(t)};}d-=part.length;}
+}
+function installationState(stage,p){
+ p=clamp01(p);const start=routeSample(MOTION.transport,0),door=routeSample(MOTION.transport,1),s={stage,p,x:start.x,z:start.z,y:MOTION.jackY+UNPACKING.palletHeight,yaw:start.yaw,liftY:MOTION.liftLow,unpack:0,waste:0,pitch:0,fix:0,cables:0,hoses:0,walking:false};
+ if(stage===1){Object.assign(s,orthogonalSample(MOTION.transport,smooth(p)));s.walking=p>0&&p<1;}
+ if(stage===2){Object.assign(s,door);s.y=blend(MOTION.jackY,MOTION.roadY,smooth(p/.08))+UNPACKING.palletHeight;s.unpack=smooth((p-.19)/.24);s.waste=0;}
+ if(stage===3){s.x=3;s.z=blend(MOTION.unpackZ,3.95,smooth(p/.60));const surface=z=>MOTION.roadY+(MOTION.liftLow-MOTION.roadY)*clamp01((5.48-z)/.62)+UNPACKING.palletHeight*clamp01((z-6.35)/.88),front=surface(s.z-.54),rear=surface(s.z+.54);s.y=(front+rear)/2;s.pitch=-Math.atan2(rear-front,1.08);s.yaw=0;s.unpack=1;s.waste=smooth((p-.90)/.10);s.walking=p>0&&p<.60;}
+ if(stage===4){s.x=3;s.z=3.95;s.yaw=0;s.liftY=blend(MOTION.liftLow,MOTION.floorY,smooth((p-.12)/.28));s.y=s.liftY;s.unpack=1;s.waste=1;if(p>.60){Object.assign(s,((typeof pipeline!=='undefined'&&pipeline?.enabled)?orthogonalSample:routeSample)(MOTION.inside.map((point,i)=>i>=3?[point[0]+(installation?.pipelineOffset||0),point[1]]:point),smooth((p-.60)/.40)));s.y=MOTION.floorY;s.walking=p<1;}}
+ if(stage>=5){s.x=MOTION.target[0]+(installation?.pipelineOffset||0);s.z=MOTION.target[1];s.y=MOTION.floorY;s.yaw=0;s.liftY=MOTION.floorY;s.unpack=1;s.waste=1;s.fix=stage===5?smooth(p):1;if(stage===5)s.pitch=THREE.MathUtils.degToRad(FIXING.tilt)*smooth(p/.10)*(1-smooth((p-FIXING.feetEnd)/(FIXING.levelEnd-FIXING.feetEnd)));}
+ if(stage>=6)s.cables=stage===6?clamp01((p-.30)/.50)*6:6;
+ if(stage===7)s.hoses=clamp01((p-.12)/.80)*2;
+ return s;
+}
+// 三段固定动画：先承重，再校平，最后逐颗插入并旋紧螺丝。
+function updateFixing(s){
+ const I=installation,p=s.stage<5?0:s.stage>5?1:s.p;
+ const level=smooth((p-FIXING.feetEnd)/(FIXING.levelEnd-FIXING.feetEnd));
+ I.feet.forEach((foot,i)=>{const d=foot.userData,q=smooth((p-i*.075)/.065),contact=(FIXING.ground-s.y+d.dz*Math.sin(s.pitch))/Math.cos(s.pitch)+.008;
+ d.lower=q;d.pad.position.y=blend(.053,contact,q);d.pad.rotation.y=q*Math.PI*8+smooth(level*4-i)*Math.PI*2;
+ setBeam(d.shaft,[0,d.pad.position.y+.008,0],[0,.105,0],.009);
+ d.nut.position.y=d.pad.position.y+.032;d.nut.rotation.y=d.pad.rotation.y;
+ });
+ let count=0;I.bolts.forEach((bolt,i)=>{const q=clamp01((p-FIXING.boltStart-i*.075)/.075);bolt.visible=s.stage>=5&&p>=FIXING.boltStart+i*.075;bolt.userData.screw.position.y=(1-smooth(q/.40))*.16;bolt.userData.screw.rotation.y=smooth((q-.40)/.45)*Math.PI*10;bolt.userData.installed=q>=1-1e-8;if(bolt.userData.installed)count++;});
+ I.level.visible=s.stage===5&&p>=FIXING.feetEnd;I.level.position.copy(I.hero.position).add(new THREE.Vector3(0,2.31,.2));I.level.rotation.x=s.pitch;I.levelBubble.position.x=(1-level)*.03;
+ const angle=Math.abs(THREE.MathUtils.radToDeg(s.pitch));
+ I.fixingAction=p<FIXING.feetEnd?'1 / 3 · 四角承重地脚旋转着地':p<FIXING.boltStart?'2 / 3 · 调平 · 水平 '+angle.toFixed(3)+'° / 垂直 '+(90-angle).toFixed(3)+'°':'3 / 3 · 前后短边安装 M12 · '+count+' / 4 颗';
+ Object.assign($('viewport').dataset,{activeWorkers:String(s.stage===0?0:s.stage<5?4:2),fixingPhase:p<FIXING.feetEnd?'feet':p<FIXING.boltStart?'level':'bolts',levelHorizontal:angle.toFixed(3),levelVertical:(90-angle).toFixed(3),installedM12:String(count)});
+ updateFixingHUD(s,level,count);if(I.fixDetail)syncFixingDetail(s,level); 
+}
+// 特写使用真实地脚和螺丝的几何及同步姿态；剖去柜体外壳以露出操作细节。
+function updateFixingHUD(s,level,count){
+ const p=s.p,phase=p<FIXING.feetEnd?0:p<FIXING.boltStart?1:2,active=Math.min(3,Math.floor(Math.max(0,p-FIXING.boltStart)/.075)),angle=Math.abs(THREE.MathUtils.radToDeg(s.pitch));
+ $('fix-detail').hidden=(typeof pipeline!=='undefined'&&pipeline?.enabled)||s.stage!==5&&s.stage!==7;
+ if(s.stage===7)return;
+ $('fix-gauges').hidden=false;$('fix-phase-0').textContent='① 地脚着地';$('fix-phase-1').textContent='② 调平';$('fix-phase-2').textContent='③ 螺丝固定';
+ $('fix-horizontal').textContent=angle.toFixed(3)+'°';$('fix-vertical').textContent=(90-angle).toFixed(3)+'°';
+ $('fix-h-bubble').style.left=(50+angle/FIXING.tilt*34)+'%';$('fix-v-bubble').style.left=(50-angle/FIXING.tilt*34)+'%';
+ for(let i=0;i<3;i++)$('fix-phase-'+i).dataset.state=p>=1||i<phase?'done':i===phase?'active':'pending';
+ const names=['前左','前右','后左','后右'],foot=Math.min(3,Math.floor(p/.075)),q=clamp01((p-FIXING.boltStart-active*.075)/.075);
+ $('fix-title').textContent=phase===2?(active<2?'前侧':'后侧')+' M12 紧固特写':'四角承重脚 · 剖视特写';
+ $('fix-action').textContent=p>=1?'固定完成 · 4 / 4 颗已紧固':phase===0?(p>.305?'四角已着地 · 准备校平':names[foot]+'地脚旋转下降 · 绿色圈表示已接地'):phase===1?(p>=FIXING.levelEnd?'水平仪已居中 · 准备紧固':'逐脚微调高度 · 双水平仪气泡逐渐居中'):(names[active]+' M12 · '+(q<.15?'对孔':q<.40?'插入':q<.85?'扳手旋紧':'紧固确认')+' · '+count+' / 4 颗');
+}
+function initFixingDetail(){
+ const I=installation,detailScene=new THREE.Scene();detailScene.background=new THREE.Color('#f4f7f8');detailScene.environment=scene.environment;
+ detailScene.add(new THREE.HemisphereLight(0xffffff,0x7c878c,3));const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(-2,4,3);detailScene.add(light);
+ const viewCamera=new THREE.PerspectiveCamera(38,1,.005,20),viewRenderer=new THREE.WebGLRenderer({antialias:true,alpha:false});viewRenderer.setPixelRatio(Math.min(devicePixelRatio,1.5));viewRenderer.toneMapping=THREE.ACESFilmicToneMapping;viewRenderer.outputColorSpace=THREE.SRGBColorSpace;$('fix-view').append(viewRenderer.domElement);
+ const footGroup=new THREE.Group();detailScene.add(footGroup);const feet=I.feet.map(f=>{const clone=f.clone(true);clone.traverse(m=>{if(m.isMesh)m.material=m.material.clone();});footGroup.add(clone);return clone;});
+ // 半透明底框仅提供柜底方位，避免完整柜壳遮住脚盘和工具。
+ const frameMat=new THREE.MeshStandardMaterial({color:'#bcc6ca',transparent:true,opacity:.22,depthWrite:false,roughness:.7});box(footGroup,.60,.025,1.40,0,.105,0,frameMat,false);
+ box(detailScene,1.2,.008,2.1,0,-.004,0,new THREE.MeshStandardMaterial({color:'#e6ebeb',roughness:.9}),false);
+ const bolts=I.bolts.map(b=>{const clone=b.clone(true);clone.traverse(m=>{if(m.isMesh)m.material=m.material.clone();});detailScene.add(clone);return clone;});
+ const rings=I.feet.map(f=>{const m=new THREE.Mesh(new THREE.RingGeometry(.055,.065,32),new THREE.MeshBasicMaterial({color:'#20ad7a',side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.set(f.position.x,.001,f.position.z);detailScene.add(m);return m;});
+ const wrench=new THREE.Group();detailScene.add(wrench);box(wrench,.012,.012,.16,0,.006,.075,M.steel,false);const socket=new THREE.Mesh(new THREE.CylinderGeometry(.016,.016,.018,6),M.steel);socket.position.y=.008;wrench.add(socket);
+ I.fixDetail={scene:detailScene,camera:viewCamera,renderer:viewRenderer,footGroup,feet,bolts,rings,wrench,lastWidth:0,lastHeight:0};
+}
+function syncFixingDetail(s,level){
+ const I=installation,D=I.fixDetail,p=s.p,phase=p<FIXING.feetEnd?0:p<FIXING.boltStart?1:2,active=phase===2?Math.min(3,Math.floor(Math.max(0,p-FIXING.boltStart)/.075)):Math.min(3,Math.floor(p/.075));
+ D.pipeActive=false;D.footGroup.position.set(0,s.y-FIXING.ground,0);D.footGroup.rotation.x=s.pitch;
+ const sync=(source,target,highlight)=>{target.position.copy(source.position);target.quaternion.copy(source.quaternion);target.scale.copy(source.scale);target.visible=source.visible;if(target.isMesh){target.material.color.set(highlight?'#efa437':source.material.color);}
+  for(let i=0;i<source.children.length;i++)sync(source.children[i],target.children[i],highlight);};
+ I.feet.forEach((f,i)=>{sync(f,D.feet[i],phase<2&&i===(phase===0?active:Math.min(3,Math.floor(level*4)))&&p<FIXING.levelEnd);D.rings[i].visible=f.userData.lower>=.999;});
+ I.bolts.forEach((b,i)=>{sync(b,D.bolts[i],phase===2&&i===active&&p<1);D.bolts[i].position.set(b.position.x-s.x,b.position.y-FIXING.ground,b.position.z-s.z);});
+ const q=clamp01((p-FIXING.boltStart-active*.075)/.075);D.wrench.visible=phase===2&&q>=.40&&q<.85;
+ if(phase===2){const b=D.bolts[active];D.wrench.position.set(b.position.x,.035,b.position.z);D.wrench.rotation.y=Math.sin(q*70)*.6;const sign=active<2?1:-1;D.camera.position.set(b.position.x+.28,.26,b.position.z+sign*.43);D.camera.lookAt(b.position.x,.065,b.position.z);}
+ else{D.camera.position.set(.95,.68,1.58);D.camera.lookAt(0,.035,0);}
+}
+function renderFixingDetail(){const D=installation?.fixDetail;if(!D||$('fix-detail').hidden)return;const w=$('fix-view').clientWidth,h=$('fix-view').clientHeight;if(w<1||h<1)return;if(w!==D.lastWidth||h!==D.lastHeight){D.renderer.setSize(w,h,false);D.camera.aspect=w/h;D.camera.updateProjectionMatrix();D.lastWidth=w;D.lastHeight=h;}D.renderer.render(D.pipeActive?D.pipeScene:D.scene,D.camera);}
+// 连管分为取帽、对准、轴向插入和旋转锁定；主场景与特写共用进度。
+function pipeConnectionPose(amount){const q=clamp01(amount);return{q,align:smooth((q-.18)/.27),insert:smooth((q-.45)/.30),lock:smooth((q-.75)/.20),uncap:smooth(q/.18)};}
+function updatePipeConnection(s){
+ const I=installation;
+ I.hoses.forEach((hose,i)=>{const pose=pipeConnectionPose(s.hoses-i),{q,align,insert,uncap}=pose,cap=I.caps[i];
+  cap.position.copy(cap.userData.rest);cap.position.y-=uncap*.055;cap.position.x-=uncap*.06;cap.visible=q<.18;
+  hose.visible=q>=.18;
+  if(!hose.userData.coupler){const coupler=new THREE.Mesh(new THREE.CylinderGeometry(.037,.037,.035,6),M.steel);(I.pipelineRoot||scene).add(coupler);hose.userData.coupler=coupler;}
+  const coupler=hose.userData.coupler;coupler.visible=hose.visible;coupler.position.fromArray(hose.userData.port);coupler.position.x-=.055*(1-align);coupler.position.y-=.0175+.075*(1-insert);coupler.rotation.y=pose.lock*Math.PI/2;
+  if(hose.userData.lastQ!==q){const points=hose.userData.basePoints.map(p=>p.clone()),offset=new THREE.Vector3(-.055*(1-align),-.075*(1-insert),0);points.at(-1).add(offset);points.at(-2).add(offset);
+   const curve=new THREE.CatmullRomCurve3(points,false,'centripetal'),old=hose.geometry;hose.geometry=new THREE.TubeGeometry(curve,48,.024,8,false);old.dispose();hose.geometry.setDrawRange(0,hose.geometry.index.count);hose.userData.lastQ=q;
+  }
+ });
+ if(s.stage!==7)return;
+ const index=Math.min(1,Math.floor(s.hoses)),P=pipeConnectionPose(s.hoses-index),phase=P.q<.18?0:P.q<.75?1:2;
+ $('fix-gauges').hidden=true;$('fix-title').textContent=(index===0?'供水':'回水')+'接口 · 后侧左边特写';
+ ['① 取下防尘帽','② 对准并插入','③ 锁定确认'].forEach((name,i)=>{const el=$('fix-phase-'+i);el.textContent=name;el.dataset.state=s.p>=1||i<phase?'done':i===phase?'active':'pending';});
+ $('fix-action').textContent=s.p>=1?'供水 / 回水连接完成 · 2 / 2 路':(P.q<.18?'向下取帽':P.q<.45?'托住软管，对准接口':P.q<.75?'向上插入快接头':'旋转锁紧并确认')+' · '+Math.floor(s.hoses)+' / 2 路';
+ if(I.fixDetail)syncPipeDetail(s,index,P);
+}
+function syncPipeDetail(s,index,P){
+ const I=installation,D=I.fixDetail;D.pipeActive=true;
+ if(!D.pipeScene){const g=D.pipeScene=new THREE.Scene();g.background=new THREE.Color('#f4f7f8');g.environment=scene.environment;g.add(new THREE.HemisphereLight(0xffffff,0x77838a,3));const light=new THREE.DirectionalLight(0xffffff,3);light.position.set(-1,2,2);g.add(light);
+  D.pipePorts=COOLING.portXs.map((x,i)=>{const group=new THREE.Group();group.position.x=x;g.add(group);rod(group,[0,.16,0],[0,.50,0],.026,i===0?M.supply:M.return);rod(group,[0,.16,0],[0,.23,0],.035,M.steel);
+   const cap=rod(group,[0,.146,0],[0,.16,0],.037,M.board);
+   const tip=new THREE.Group();group.add(tip);rod(tip,[0,-.16,0],[0,0,0],.024,i===0?M.supply:M.return);const collar=new THREE.Mesh(new THREE.CylinderGeometry(.039,.039,.035,6),M.steel);collar.position.y=-.0175;tip.add(collar);
+   const ring=new THREE.Mesh(new THREE.TorusGeometry(.043,.003,8,24),new THREE.MeshBasicMaterial({color:'#20ad7a'}));ring.rotation.x=Math.PI/2;ring.position.y=.145;group.add(ring);
+   return {group,cap,tip,collar,ring};
+  });
+  // 两只灰色手分别扶住接口和托举软管，手指随插接和锁紧同步运动。
+  D.pipeHands=[-1,1].map(side=>{const hand=new THREE.Group();g.add(hand);box(hand,.045,.024,.064,0,0,0,M.worker,false);for(let j=0;j<3;j++)rod(hand,[-.015+j*.014,0,-.035],[-.015+j*.014,-.014,-.055],.006,M.worker);rod(hand,[side*.025,0,0],[side*.035,-.015,-.02],.008,M.worker);rod(hand,[0,0,.03],[side*.08,.02,.12],.018,M.worker);return hand;});
+ }
+ D.pipePorts.forEach((part,i)=>{const p=pipeConnectionPose(s.hoses-i);part.cap.position.set(-p.uncap*.06,.153-p.uncap*.055,0);part.cap.visible=p.q<.18;part.tip.visible=p.q>=.18;part.tip.position.set(-.055*(1-p.align),.16-.075*(1-p.insert),0);part.collar.rotation.y=p.lock*Math.PI/2;part.ring.visible=p.q>=.95;});
+ const x=COOLING.portXs[index],tip=D.pipePorts[index].tip;
+ D.pipeHands[0].position.set(x-.046,.20,.028);D.pipeHands[1].position.set(x+tip.position.x+.036,P.q<.18?.153-P.uncap*.055:tip.position.y-.05,.036);D.pipeHands[1].rotation.y=P.lock*Math.PI/2;D.pipeHands.forEach(hand=>hand.visible=s.p<.98);
+ D.camera.position.set(-.57,.40,.65);D.camera.lookAt(-.16,.19,0);
+}
+function buildEquipment(offset=0,slot=9,shared=true){
+ const targetX=MOTION.target[0]+offset;
+ // 9 号柜位空置，直到施工主角真正被推入；不使用静态机柜替身。
+ for(const r of RACK_LAYOUT){if(shared&&r.id!==9){const rack=makeRack(r.x,r.z,r.id,r.type,0,r.type==='cdu'?7:r.type==='power'?6:5);if(r.z<0)rack.rotation.y=Math.PI;}}
+ installation={pipelineOffset:offset,slot,boards:[],workers:[],panels:[],feet:[],bolts:[],wires:[],plugs:[],hoses:[],caps:[],liftBeams:[],lastAction:''};
+ const I=installation;const targetMat=new THREE.MeshBasicMaterial({color:'#6698be',transparent:true,opacity:.7});
+ for(const dx of[-.33,.33])box(scene,.014,.009,1.46,targetX+dx,.032,.5,targetMat,false);for(const dz of[-.73,.73])box(scene,.67,.009,.014,targetX,.032,.5+dz,targetMat,false);
+ 
+ // 散力板长轴沿直线路段，拐角以正交矩形拼接，不使用斜板。
+ // [区域, x 起点, x 终点, z 起点, z 终点, 行进轴]；矩形互不重叠。
+ const boardRuns=[['outside',-5.9,3.7,7.725,9.125,'x'],['outside',2.3,3.7,4.42,7.725,'z'],['inside',2.3,3.7,1.40,3.00,'z'],['inside',-3.50,2.3,1.60,3.00,'x']];
+ for(const [zone,x0,x1,z0,z1,axis] of boardRuns){const length=axis==='x'?x1-x0:z1-z0,width=axis==='x'?z1-z0:x1-x0,count=Math.max(1,Math.floor(length/1.55)),long=length/count;
+  for(let i=0;i<count;i++){const x=axis==='x'?x0+(i+.5)*long:(x0+x1)/2,z=axis==='z'?z0+(i+.5)*long:(z0+z1)/2,thickness=zone==='inside'?.012:.035,y=zone==='inside'?.019:-.756;
+   const board=box(scene,width-.006,thickness,long-.006,x,y,z,zone==='inside'?M.interiorBoard:M.board);board.rotation.y=axis==='x'?Math.PI/2:0;board.userData={zone,base:[x,y,z],size:[width-.006,thickness,long-.006],axis};I.boards.push(board);
+  }
+ }
+ // 实际移动机柜：使用同一个 Group，配有脚轮、调平脚及后置 Manifold。
+ I.hero=makeRack(-5,8.425,9,'compute',MOTION.jackY+UNPACKING.palletHeight,1);I.hero.name='moving-installation-rack-'+slot;I.hero.userData.referenceId=slot;if(slot!==9){for(const child of [...I.hero.children])if(child.geometry?.type==='PlaneGeometry')I.hero.remove(child);const label=textLabel(String(slot),I.hero.position.x,I.hero.position.y+2.267,I.hero.position.z,.43,'#ff2929',true);label.rotation.z=-Math.PI/2;I.hero.attach(label);}
+ for(const dx of[-.22,.22])for(const dz of[-.54,.54]){const caster=new THREE.Mesh(new THREE.CylinderGeometry(.045,.045,.035,12),M.steel);caster.rotation.z=Math.PI/2;caster.position.set(dx,.045,dz);I.hero.add(caster);}
+ // 四角独立承重脚：圆形脚盘、螺杆和旋转调节螺母。
+ for(const [dx,dz] of FIXING.points){const foot=new THREE.Group();foot.position.set(dx,0,dz);I.hero.add(foot);
+ const pad=new THREE.Mesh(new THREE.CylinderGeometry(.049,.054,.016,20),M.steel);foot.add(pad);
+ const shaft=rod(foot,[0,.06,0],[0,.105,0],.009,M.steel);
+ const nut=new THREE.Mesh(new THREE.CylinderGeometry(.023,.023,.019,6),M.steel);foot.add(nut);
+ const mark=box(nut,.006,.004,.018,.014,.011,0,M.black);
+ foot.userData={pad,shaft,nut,dz,lower:0};I.feet.push(foot);}
+ // 封闭的供回水立管，每根仅在最底端设置一个向下快接，不再设置侧向支口。
+ I.manifold=new THREE.Group();I.manifold.name='two-port-downward-manifold';I.hero.add(I.manifold);
+ for(const [i,dx] of COOLING.portXs.entries()){
+  const mat=i===0?M.supply:M.return;
+  rod(I.manifold,[dx,.23,COOLING.portZ],[dx,2.02,COOLING.portZ],.026,mat);
+  for(const y of[.40,1.10,1.85])box(I.manifold,.074,.022,.055,dx,y,-.727,M.steel);
+  const connector=rod(I.manifold,[dx,COOLING.portY,COOLING.portZ],[dx,.23,COOLING.portZ],.035,M.steel);connector.name=i===0?'supply-downward-port':'return-downward-port';connector.userData.direction=[0,-1,0];
+  const cap=rod(I.manifold,[dx,COOLING.portY-.014,COOLING.portZ],[dx,COOLING.portY,COOLING.portZ],.037,M.board);cap.userData.rest=cap.position.clone();I.caps.push(cap);
+ }
+ // 独立五面纸箱；向外拆开后分别平放，最后统一装车。
+ const specs=[[.87,2.38,.035,0,1.19,.96],[.87,2.38,.035,0,1.19,-.96],[.035,2.38,1.92,-.435,1.19,0],[.035,2.38,1.92,.435,1.19,0],[.905,.035,1.955,0,2.395,0]];
+ specs.forEach((a,i)=>{const panel=box(scene,...a.slice(0,3),0,0,0,i===4?M.packingTop:M.packing);panel.userData.local=new THREE.Vector3(...a.slice(3));panel.userData.index=i;I.panels.push(panel);});
+ // 木栈板、青蓝色内膜和揭膜卷边，均为独立实物，收尾时一起清运。
+ I.pallet=new THREE.Group();I.pallet.name='wooden-shipping-pallet';scene.add(I.pallet);
+ for(const z of[-.74,0,.74])box(I.pallet,.96,.07,.105,0,.045,z,M.wood);
+ for(let i=0;i<6;i++)box(I.pallet,.96,.028,.29,0,.106,-.81+i*.324,M.wood);
+ for(const x of[-.39,.39])box(I.pallet,.13,.021,1.94,x,.012,0,M.wood);
+ I.innerFilm=new THREE.Group();I.innerFilm.name='cyan-inner-plastic-film';scene.add(I.innerFilm);
+ const wrap=box(I.innerFilm,.77,2.32,1.83,0,1.16,-.045,M.film,false);wrap.name='plastic-film-sleeve';
+ const crease=new THREE.MeshBasicMaterial({color:'#b2edf0',transparent:true,opacity:.6,depthWrite:false});
+ for(let i=0;i<8;i++){const y=.14+i*.28;rod(I.innerFilm,[-.389,y,.874],[.389,y+.028,.874],.004,crease);rod(I.innerFilm,[-.389,y,-.964],[-.389,y+.024,.874],.004,crease);}
+ I.filmRoll=new THREE.Group();I.filmRoll.name='peeled-film-roll';scene.add(I.filmRoll);
+ for(const [a,b]of[[[-.39,0,.875],[.39,0,.875]],[[-.39,0,-.965],[.39,0,-.965]],[[-.39,0,-.965],[-.39,0,.875]],[[.39,0,-.965],[.39,0,.875]]])rod(I.filmRoll,a,b,.032,M.film);
+ I.filmBundle=new THREE.Group();scene.add(I.filmBundle);I.filmBundle.name='collected-cyan-film';
+ for(let i=0;i<5;i++){const crumple=new THREE.Mesh(new THREE.IcosahedronGeometry(.14,1),M.film);crumple.scale.set(1.3,.5,.8);crumple.position.set((i-2)*.11,.015*(i%2),.035*Math.sin(i*2));I.filmBundle.add(crumple);}
+ // 栈板撤出期间使用低位支承工装，避免机柜悬空。
+ I.unpackSupports=new THREE.Group();scene.add(I.unpackSupports);
+ for(const dx of[-.31,.31])for(const dz of[-.58,.58])box(I.unpackSupports,.10,.12,.17,dx,.06,dz,M.steel);
+ // 两侧拆包装临时落板区，与纸箱拆卸方向对应。
+ // 拆包区保留动画位置，删除额外扩展地面。
+ I.palletRamp=box(scene,.95,.025,.88,3,MOTION.roadY+.055,6.81,M.wood);I.palletRamp.rotation.x=-.135;
+ I.jack=new THREE.Group();scene.add(I.jack);I.jack.userData.step=1;selectables.push(I.jack);
+ for(const dx of[-.20,.20])box(I.jack,.13,.085,1.48,dx,.145,-.08,M.orange);
+ box(I.jack,.61,.17,.40,0,.14,.74,M.orange);rod(I.jack,[0,.19,.86],[0,1.02,1.22],.035,M.steel);rod(I.jack,[-.22,1.02,1.22],[.22,1.02,1.22],.034,M.black);
+ for(const dx of[-.25,.25])for(const dz of[-.62,.76]){const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.065,.065,.055,12),M.black);wheel.rotation.z=Math.PI/2;wheel.position.set(dx,.066,dz);I.jack.add(wheel);}
+ I.wasteCart=new THREE.Group();scene.add(I.wasteCart);box(I.wasteCart,1.12,.09,1.48,0,.29,0,M.steel);for(const dx of[-.46,.46])for(const dz of[-.58,.58]){const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.10,.10,.065,12),M.black);wheel.rotation.z=Math.PI/2;wheel.position.set(dx,.13,dz);I.wasteCart.add(wheel);}for(const dx of[-.46,.46])rod(I.wasteCart,[dx,.32,.66],[dx,1.0,.66],.02,M.steel);rod(I.wasteCart,[-.46,1,.66],[.46,1,.66],.025,M.steel);
+ // 液压升降机：固定底座、可动台面、随高度伸展的剪叉和活塞。
+ I.lift=new THREE.Group();I.lift.position.set(3,-.79,3.95);I.lift.userData.step=3;scene.add(I.lift);selectables.push(I.lift);box(I.lift,1.40,.09,1.84,0,.045,0,M.steel);
+ I.deck=new THREE.Group();I.lift.add(I.deck);box(I.deck,1.40,.07,1.84,0,-.051,0,M.orange);box(I.deck,1.28,.016,1.77,0,-.008,0,M.steel);
+ for(const x of[-.65,.65]){for(const z of[-.76,.76])rod(I.deck,[x,.02,z],[x,.70,z],.023,M.orange);rod(I.deck,[x,.70,-.8],[x,.70,.8],.032,M.orange);}
+ for(const x of[-.46,.46])for(const reverse of[false,true]){const beam=rod(I.lift,[x,.08,-.6],[x,.2,.6],.034,M.orange);beam.userData={x,reverse};I.liftBeams.push(beam);}
+ I.piston=rod(I.lift,[0,.1,.52],[0,.2,-.3],.036,M.steel);
+ // 接载坡板与楼内对接板，在对应动作时出现。
+ I.loadRamp=box(scene,1.28,.025,.62,3,-.680,5.17,M.steel);I.loadRamp.rotation.x=.215;
+ I.bridge=box(scene,1.30,.024,.20,3,.013,3.015,M.steel);I.bridge.visible=false;
+ for(let i=0;i<4;i++)box(scene,.62,(i+1)*.20,.30,1.6,-.79+(i+1)*.10,4.3-i*.3,M.base);
+ box(scene,.66,.07,.45,1.6,-.01,3.15,M.base);
+ for(let i=0;i<4;i++)I.workers.push(createWorker(i));
+ I.wrench=new THREE.Group();I.workers[0].userData.arms[1].elbow.add(I.wrench);I.wrench.position.set(0,-.29,0);box(I.wrench,.025,.18,.025,0,-.035,0,M.steel);box(I.wrench,.075,.03,.025,0,-.13,0,M.steel);
+ // 前后短边各两颗 M12 螺丝；安装位置独立于承重脚。
+ for(const [dx,dz] of FIXING.boltPoints){const bolt=new THREE.Group();bolt.position.set(targetX+dx,FIXING.ground,MOTION.target[1]+dz);scene.add(bolt);
+ const plate=box(bolt,.10,.012,.10,0,.006,0,M.steel);
+ const screw=new THREE.Group();bolt.add(screw);
+ const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,.045,12),M.steel);shaft.position.y=-.0075;screw.add(shaft);
+ const washer=new THREE.Mesh(new THREE.CylinderGeometry(.019,.019,.003,16),M.steel);washer.position.y=.0135;screw.add(washer);
+ const head=new THREE.Mesh(new THREE.CylinderGeometry(.011,.011,.013,6),M.steel);head.position.y=.0215;screw.add(head);
+ bolt.userData={screw,shaft,plate,installed:false};I.bolts.push(bolt);}
+ I.level=new THREE.Group();box(I.level,.45,.05,.07,0,0,0,M.orange);box(I.level,.10,.03,.075,0,.03,0,M.pale);
+ I.levelBubble=box(I.level,.018,.016,.078,0,.038,0,M.ground);scene.add(I.level);
+ // 顶部连接器明确分为 A/B 各三路；每根电缆独立生长到对应插座。
+ box(scene,.60,.08,.24,targetX,3.32,1.40,M.steel);
+ for(const x of[-3.48,-2.12])rod(scene,[x,3.35,1.40],[x,3.85,1.40],.012,M.steel);
+ const cableMaterials=[new THREE.MeshStandardMaterial({color:'#46515b',roughness:.65}),new THREE.MeshStandardMaterial({color:'#668cba',roughness:.65})];
+ for(let i=0;i<6;i++){const x=targetX+(i-2.5)*.09,group=i<3?0:1,name=(i<3?'A':'B')+(i%3+1);const socket=rod(scene,[x,3.16,1.40],[x,3.31,1.40],.035,cableMaterials[group]);socket.userData.step=6;selectables.push(socket);const cap=rod(scene,[x,3.11,1.40],[x,3.17,1.40],.025,M.steel);I.plugs.push(cap);textLabel(name,x,3.39,1.54,.18,group?'#567cac':'#505b61');
+  const wire=pipe(scene,[[targetX+(i-2.5)*.084,2.27,.37],[targetX+(i-2.5)*.105,2.63,.60],[x,2.82,1.14],[x,3.14,1.40]],.019,cableMaterials[group]);wire.userData.indexCount=wire.geometry.index.count;I.wires.push(wire);
+ }
+ // 带护栏的作业平台供顶部插接演示使用。
+ I.workPlatform=new THREE.Group();scene.add(I.workPlatform);box(I.workPlatform,1.1,.09,.85,0,1.30,0,M.steel);for(const x of[-.46,.46]){for(const z of[-.34,.34])rod(I.workPlatform,[x,.05,z],[x,2.40,z],.022,M.steel);rod(I.workPlatform,[x,2.40,-.34],[x,2.40,.34],.023,M.orange);}
+ // Six broad treads connect the floor to the working deck.
+ for(let n=1;n<6;n++){const z=.24+(6-n)*.22,y=1.345*n/6;box(I.workPlatform,.74,.055,.30,-.30,y-.0275,z,M.steel);}
+ for(const x of[-.67,.07]){rod(I.workPlatform,[x,.08,1.56],[x,1.32,0],.025,M.steel);rod(I.workPlatform,[x,.95,1.56],[x,2.27,0],.022,M.orange);}
+
+ // 两列之间的二次侧供回水主管，以地板完成面为标高基准。
+ I.secondary=new THREE.Group();I.secondary.name='secondary-pipes-600mm';scene.add(I.secondary);I.secondary.userData.heightAboveFloor=COOLING.height;
+ const mainY=COOLING.floor+COOLING.height;
+ for(const [i,mat] of[[0,M.supply],[1,M.return]]){
+  const z=COOLING.lanes[i],dx=COOLING.portXs[i],x=targetX+dx,port=[x,MOTION.floorY+COOLING.portY,MOTION.target[1]+COOLING.portZ];
+  const main=rod(I.secondary,[COOLING.xStart,mainY,z],[COOLING.xEnd,mainY,z],.036,mat);main.name=i===0?'secondary-supply-main':'secondary-return-main';
+  rod(I.secondary,[COOLING.xStart,mainY,z],[COOLING.xStart+.06,mainY,z],.044,M.steel);
+  rod(I.secondary,[x,mainY,z],[x,mainY+.075,z],.038,M.steel);
+  // 软管末端沿 +Y 插入向下的接口；末段保持竖直，避免从侧面穿入立管。
+  const hose=pipe(scene,[[x,mainY+.075,z],[x,mainY+.18,z],[x,-.22,port[2]-.12],[x,-.09,port[2]],[x,.115,port[2]],port],.024,mat,true);
+  hose.name=i===0?'secondary-supply-hose':'secondary-return-hose';hose.userData.port=port;hose.userData.basePoints=hose.geometry.parameters.path.points.map(p=>p.clone());hose.userData.indexCount=hose.geometry.index.count;I.hoses.push(hose);
+ }
+ for(const x of[-3.28,-1.35,.9]){for(const z of[-1.20,-.76]){box(I.secondary,.10,.016,.10,x,HOT_AISLE.bottom+.008,z,M.steel);rod(I.secondary,[x,HOT_AISLE.bottom+.016,z],[x,mainY-.045,z],.015,M.steel);}box(I.secondary,.046,.032,.54,x,mainY-.055,-.98,M.steel);}
+ const points=[];flowPaths.slice(-2).forEach((curve,i)=>{for(let j=0;j<8;j++)points.push({curve,phase:j/8,speed:.11,index:i});});const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(points.length*3),3));const mesh=new THREE.Points(geo,new THREE.PointsMaterial({color:'#8eaebc',size:.035,transparent:true,opacity:.75,depthWrite:false}));scene.add(mesh);scene.userData.flow={points,geometry:geo,mesh};
+}
+// 灰色白模人物：肩、肘、髋、膝及踝独立驱动；足底保持在当前支撑面。
+
+// Approved blank-face worker. Shared geometry keeps all crews economical to draw.
+function refinedWorkerGeometry(){
+ if(refinedWorkerGeometry.cache)return refinedWorkerGeometry.cache;
+ const combine=parts=>{const positions=[],normals=[];for(const [geometry,scale=[1,1,1],position=[0,0,0],rotation=null]of parts){const geo=geometry.index?geometry.toNonIndexed():geometry.clone();const q=new THREE.Quaternion();if(rotation)q.setFromEuler(new THREE.Euler(...rotation));geo.applyMatrix4(new THREE.Matrix4().compose(new THREE.Vector3(...position),q,new THREE.Vector3(...scale)));positions.push(...geo.attributes.position.array);normals.push(...geo.attributes.normal.array);geo.dispose();geometry.dispose();}const out=new THREE.BufferGeometry();out.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));out.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));out.computeBoundingSphere();return out;};
+ const sphere=()=>new THREE.SphereGeometry(1,20,14),cube=()=>new THREE.BoxGeometry(1,1,1);
+ const hand=grip=>{const pieces=[[sphere(),[.029,.027,.014],[0,0,0]]];for(let i=0;i<4;i++){const x=(i-1.5)*.013,l=[.026,.032,.030,.022][i];pieces.push([new THREE.CapsuleGeometry(.0055,l*.45,3,8),[1,1,1],[x,-.026-l*.25,grip?.007:0],grip?[.9,0,0]:null]);pieces.push([sphere(),[.0055,l*.24,.0055],[x,-.030-l*.45,grip?.017:.003]]);}pieces.push([new THREE.CapsuleGeometry(.007,.021,3,8),[1,1,1],[.03,-.006,grip?.01:0],[0,0,.6]]);return combine(pieces);};
+ const torso=new THREE.LatheGeometry([[.14,.79],[.158,.88],[.16,.99],[.172,1.12],[.19,1.25],[.174,1.30],[.083,1.335]].map(([r,y])=>new THREE.Vector2(r,y)),28);torso.scale(1,1,.68);
+ const footwear=combine([[sphere(),[.49,.60,.48],[0,.08,0]],[cube(),[.96,.24,.98],[0,-.38,0]],[sphere(),[.42,.71,.24],[0,.47,-.20]]]);
+ const dome=new THREE.SphereGeometry(.126,28,18,0,Math.PI*2,0,Math.PI*.51);dome.scale(1,1,1.08);
+ const rib=new THREE.TubeGeometry(new THREE.CatmullRomCurve3([[0,1.585,.131],[0,1.68,.085],[0,1.718,0],[0,1.679,-.093],[0,1.585,-.137]].map(p=>new THREE.Vector3(...p))),24,.005,6,false);
+ const straps=[];for(const side of[-1,1])straps.push([new THREE.TubeGeometry(new THREE.CatmullRomCurve3([[side*.091,1.58,-.025],[side*.082,1.44,.018],[side*.044,1.359,.056],[0,1.35,.063]].map(p=>new THREE.Vector3(...p))),16,.003,6,false)]);
+ return refinedWorkerGeometry.cache={torso,sphere:sphere(),footwear,dome,rib,straps:combine(straps),openHand:hand(false),gripHand:hand(true),upper:new THREE.CylinderGeometry(1,.86,1,16,3),lower:new THREE.CylinderGeometry(1,.78,1,16,3)};
+}
+function createWorker(index){
+ const g=new THREE.Group();g.name='construction-worker-'+(index+1);g.userData.refined=true;scene.add(g);const skeleton=new THREE.Group();g.add(skeleton);const G=refinedWorkerGeometry();
+ const part=(parent,geometry,material,scale,position)=>{const o=new THREE.Mesh(geometry,material);if(scale)o.scale.set(...scale);if(position)o.position.set(...position);o.castShadow=true;parent.add(o);return o;};
+ const ball=(parent,r,x,y,z,mat=M.worker)=>part(parent,G.sphere,mat,[r,r,r],[x,y,z]);
+ part(skeleton,G.torso,M.worker);part(skeleton,G.sphere,M.worker,[.145,.098,.105],[0,.82,0]);rod(skeleton,[0,1.31,0],[0,1.43,0],.046,M.worker);
+ const head=part(skeleton,G.sphere,M.worker,[.088,.141,.09],[0,1.463,.006]);head.name='blank-head';
+ const helmet=part(skeleton,G.dome,M.helmet,null,[0,1.583,0]);helmet.name='yellow-safety-helmet';
+ const brim=new THREE.Mesh(new THREE.CylinderGeometry(.148,.146,.013,32),M.helmet);brim.position.set(0,1.582,.009);brim.scale.z=1.12;skeleton.add(brim);part(skeleton,G.rib,M.helmet);part(skeleton,G.straps,M.worker);
+ const legs=[],arms=[];
+ for(const side of[-1,1]){
+  const thigh=rod(g,[0,0,0],[0,1,0],.074,M.worker),shin=rod(g,[0,0,0],[0,1,0],.057,M.worker);thigh.geometry=G.upper;shin.geometry=G.lower;
+  const knee=ball(g,.072,0,0,0),foot=part(g,G.footwear,M.worker,[.135,.09,.235],[0,0,0]);legs.push({side,thigh,shin,knee,foot});
+  const upper=rod(g,[0,0,0],[0,1,0],.057,M.worker),fore=rod(g,[0,0,0],[0,1,0],.047,M.worker);upper.geometry=G.upper;fore.geometry=G.lower;
+  const shoulder=ball(g,.071,0,0,0),joint=ball(g,.057,0,0,0),hand=part(g,G.openHand,M.worker),elbow=new THREE.Group();g.add(elbow);arms.push({side,upper,fore,shoulder,joint,hand,elbow});
+ }
+ g.userData={legs,arms,skeleton,index,segments:[],refined:true};return g;
+}
+function poseRefinedHands(worker,grip=false){const G=refinedWorkerGeometry();for(const arm of worker.userData.arms){arm.hand.geometry=grip?G.gripHand:G.openHand;arm.hand.scale.set(arm.side,1,1);const forward=arm.hand.position.clone().sub(arm.shoulder.position);if(forward.lengthSq()>.00001)arm.hand.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),forward.normalize());}}
+function bentJoint(a,b,upper,lower,preference){
+ const delta=b.clone().sub(a),d=Math.max(.001,delta.length()),axis=delta.divideScalar(d),along=(upper*upper-lower*lower+d*d)/(2*d),bend=preference.clone().addScaledVector(axis,-preference.dot(axis));
+ if(bend.lengthSq()<.00001)bend.set(1,0,0).addScaledVector(axis,-axis.x);bend.normalize();return a.clone().addScaledVector(axis,along).addScaledVector(bend,Math.sqrt(Math.max(0,upper*upper-along*along)));
+}
+// OBB 平面碰撞，保留真实柜体朝向；半径覆盖人体肩宽、迈步与手掌厚度。
+function rackColliders(s){return racks.filter(r=>modelVisible(r)).map(r=>({x:r.position.x,z:r.position.z,y:r.position.y,top:r.position.y+2.28,yaw:r.rotation.y,hx:r===installation.hero?(s.unpack<.99?.46:.325):.315,hz:r===installation.hero?(s.unpack<.99?.985:.895):.725}));}
+function pushOut(point,obstacle,radius){
+ if(point.y>obstacle.top+.01||point.y+1.70<obstacle.y)return false;
+ const c=Math.cos(obstacle.yaw),s=Math.sin(obstacle.yaw),dx=point.x-obstacle.x,dz=point.z-obstacle.z,lx=dx*c-dz*s,lz=dx*s+dz*c;
+ const qx=Math.max(-obstacle.hx,Math.min(obstacle.hx,lx)),qz=Math.max(-obstacle.hz,Math.min(obstacle.hz,lz));let nx=lx-qx,nz=lz-qz,d=Math.hypot(nx,nz),amount;
+ if(d>=radius)return false;
+ if(d<1e-8){const gapX=obstacle.hx-Math.abs(lx),gapZ=obstacle.hz-Math.abs(lz);if(gapX<gapZ){nx=lx>=0?1:-1;nz=0;amount=gapX+radius;}else{nx=0;nz=lz>=0?1:-1;amount=gapZ+radius;}}
+ else{nx/=d;nz/=d;amount=radius-d;}
+ point.x+=(nx*c+nz*s)*(amount+.0001);point.z+=(-nx*s+nz*c)*(amount+.0001);return true;
+}
+// Three lift-and-return strokes; driven by process time so pause/seek stay deterministic.
+function filmLiftMotion(p){
+ const q=clamp01((p-UNPACKING.film[0])/(UNPACKING.film[1]-UNPACKING.film[0])),cycles=3;
+ const stroke=Math.min(cycles-1,Math.floor(q*cycles)),u=q*cycles-stroke;
+ const lift=smooth(Math.min(1,u/.62)),returning=smooth((u-.62)/.38);
+ return {hands:lift*(1-returning),removed:(stroke+lift)/cycles};
+}
+function ladderFoot(n){return {y:1.345*n/6,z:n===6?0:.24+(6-n)*.22};}
+function ladderBody(progress){
+ const u=clamp01(progress)*6,n=Math.min(5,Math.floor(u)),f=u-n,lo=ladderFoot(n),hi=ladderFoot(n+1);
+ const t=(smooth(clamp01(f*2))+smooth(clamp01(f*2-1)))/2;
+ return {y:blend(lo.y,hi.y,t),z:blend(lo.z,hi.z,t)};
+}
+function poseWorker(g,intent,obstacles,s){
+ const {x,y,z,yaw,gait,push,reach,kneel=0}=intent;g.position.set(x,y,z);g.rotation.set(0,yaw,0);const data=g.userData,drop=kneel*.40;
+ data.skeleton.position.y=-drop;data.skeleton.rotation.x=push?.055:kneel*.10;data.segments=[];
+ const world=v=>v.clone().applyAxisAngle(new THREE.Vector3(0,1,0),yaw).add(g.position);
+ const local=v=>v.clone().sub(g.position).applyAxisAngle(new THREE.Vector3(0,1,0),-yaw);
+ const safeSegment=(a,b,r)=>{for(let j=0;j<=10;j++){const q=world(a.clone().lerp(b,j/10));for(const o of obstacles){if(q.y<o.y-r||q.y>o.top+r)continue;const test={x:q.x,y:q.y,z:q.z};if(pushOut(test,{...o,top:100},r))return false;}}return true;};
+ for(const leg of data.legs){const swing=(intent.stair||s.stage===6&&data.index===1&&s.p>=.15&&s.p<=.94)?0:gait?Math.sin(gait+(leg.side===1?Math.PI:0)):0,hip=new THREE.Vector3(leg.side*.095,.83-drop,0),ankle=new THREE.Vector3(leg.side*.11,.10+Math.max(0,swing)*.045,swing*.105+kneel*.07),knee=bentJoint(hip,ankle,.41,.39,new THREE.Vector3(0,0,1));
+  if(intent.stair){
+   const {progress,origin}=intent.stair,u=clamp01(progress)*6,n=Math.min(5,Math.floor(u)),f=u-n;
+   const lo=ladderFoot(n),hi=ladderFoot(n+1),move=smooth(f);
+   // Alternate the moving foot; the other remains planted until the next tread.
+   const first=leg.side===(n%2?1:-1),phase=clamp01(first?f*2:(f-.5)*2),a=smooth(phase);
+   const point=new THREE.Vector3(origin.x-leg.side*.11,origin.y+blend(lo.y,hi.y,a)+.09+Math.sin(phase*Math.PI)*.08,origin.z+blend(lo.z,hi.z,a));
+   if(progress>=1)point.set(origin.x-leg.side*.11,origin.y+1.435,origin.z);
+   ankle.copy(local(point));knee.copy(bentJoint(hip,ankle,.41,.39,new THREE.Vector3(0,0,1)));
+  }
+  setBeam(leg.thigh,hip.toArray(),knee.toArray(),.074);setBeam(leg.shin,knee.toArray(),ankle.toArray(),.057);leg.knee.position.copy(knee);leg.foot.position.set(ankle.x,ankle.y-.055,ankle.z+.042);data.segments.push({a:world(hip),b:world(knee),r:.074},{a:world(knee),b:world(ankle),r:.057});
+ }
+ for(const arm of data.arms){const a=new THREE.Vector3(arm.side*.207,1.28-drop,0),rest=new THREE.Vector3(arm.side*.224,.78-drop,gait?Math.sin(gait+(arm.side===1?Math.PI:0))*.09:.045);let hand=rest.clone();
+  if(s.stage===7&&kneel>.1){const q=clamp01(s.hoses-Math.min(1,Math.floor(s.hoses))),insert=smooth((q-.45)/.30),lock=Math.sin(q*45)*(q>.75?.025:0);hand.set(arm.side*.22+lock,.74-drop+insert*.06,.19+insert*.065);}
+  else if(kneel>.1)hand.set(arm.side*.22,.74-drop,.20+Math.sin(s.p*90)*.025);
+  else if(intent.stair)hand.set(arm.side*.30,1.05,.22);
+  else if(reach&&s.stage===2){const lift=filmLiftMotion(s.p).hands;hand.set(arm.side*.21,1.04+.77*lift-drop,.22-.06*lift);}
+  else if(reach)hand.set(arm.side*.21,1.83-drop,.16);
+  else if(push){const shoulder=world(a),o=obstacles.find(o=>Math.abs(o.x-s.x)<.0001&&Math.abs(o.z-s.z)<.0001);if(o){const c=Math.cos(o.yaw),sn=Math.sin(o.yaw),dx=shoulder.x-o.x,dz=shoulder.z-o.z,lx=dx*c-dz*sn,lz=dx*sn+dz*c;const q={x:o.x+Math.max(-o.hx,Math.min(o.hx,lx))*c+Math.max(-o.hz,Math.min(o.hz,lz))*sn,y:shoulder.y,z:o.z-Math.max(-o.hx,Math.min(o.hx,lx))*sn+Math.max(-o.hz,Math.min(o.hz,lz))*c};pushOut(q,o,.065);const target=local(new THREE.Vector3(q.x,q.y,q.z));if(target.distanceTo(a)<.60)hand.copy(target);else hand.set(arm.side*.23,.99-drop,.25);}}
+  const delta=hand.clone().sub(a);if(delta.length()>.585)hand.copy(a).add(delta.setLength(.585));
+  let joint=bentJoint(a,hand,.30,.30,new THREE.Vector3(0,0,-1));
+  if(!safeSegment(a,joint,.057)||!safeSegment(joint,hand,.054)){hand.copy(rest);joint=bentJoint(a,hand,.30,.30,new THREE.Vector3(0,0,1));}
+  arm.shoulder.position.copy(a);arm.joint.position.copy(joint);arm.hand.position.copy(hand);setBeam(arm.upper,a.toArray(),joint.toArray(),.057);setBeam(arm.fore,joint.toArray(),hand.toArray(),.047);arm.elbow.position.copy(hand).add(new THREE.Vector3(0,.29,0));
+  data.segments.push({a:world(a),b:world(joint),r:.057},{a:world(joint),b:world(hand),r:.054});
+ }
+ poseRefinedHands(g,!!reach||kneel>.1);
+}
+function resolveWorkers(intents,s,seconds){
+ const I=installation,obstacles=rackColliders(s);if(s.stage>=3)obstacles.push({x:3,z:3.95,y:-.85,top:4,yaw:0,hx:.72,hz:.94,kind:'lift-exclusion'});const radius=.35+((s.stage===5||s.stage===7)?.32*Math.sqrt(smooth((s.p-(s.stage===7?.12:0))/.12)*(1-smooth((s.p-.94)/.06))):0),previous=I.collisionFrame,continuous=previous&&seconds>previous.time&&seconds-previous.time<.30;
+ // 将一次位移拆成小步并沿障碍边界滑移，避免从柜体一侧直接跳到另一侧。
+ const poses=intents.map((v,i)=>{const q={...v};if(continuous){const old=previous.poses[i],steps=Math.max(1,Math.ceil(Math.hypot(q.x-old.x,q.z-old.z)/.055)),position={x:old.x,y:q.y,z:old.z};for(let k=1;k<=steps;k++){const tx=blend(old.x,q.x,k/steps),tz=blend(old.z,q.z,k/steps),dx=tx-position.x,dz=tz-position.z,len=Math.hypot(dx,dz),amount=Math.min(1,.09/(len||1));position.x+=dx*amount;position.z+=dz*amount;for(let pass=0;pass<5;pass++)for(const o of obstacles)pushOut(position,o,radius);}q.x=position.x;q.z=position.z;}return q;});
+ for(let pass=0;pass<30;pass++){
+  for(const q of poses)for(const o of obstacles)pushOut(q,o,radius);
+  for(let i=0;i<poses.length;i++)for(let j=i+1;j<poses.length;j++){if(!I.workers[i].visible||!I.workers[j].visible)continue;const a=poses[i],b=poses[j];if(Math.abs(a.y-b.y)>1.65)continue;let dx=b.x-a.x,dz=b.z-a.z,d=Math.hypot(dx,dz);if(d<radius*2+.025){if(d<.0001){dx=i%2?1:0;dz=i%2?0:1;d=1;}const correction=(radius*2+.026-Math.hypot(b.x-a.x,b.z-a.z))/2;a.x-=dx/d*correction;a.z-=dz/d*correction;b.x+=dx/d*correction;b.z+=dz/d*correction;}}
+ }
+ for(let i=0;i<poses.length;i++){const q=poses[i];if(continuous){const distance=Math.hypot(q.x-previous.poses[i].x,q.z-previous.poses[i].z);I.workers[i].userData.stride=(I.workers[i].userData.stride||0)+distance*15;q.gait=distance>.00005?I.workers[i].userData.stride:0;}poseWorker(I.workers[i],q,obstacles,s);}
+ I.collisionFrame={time:seconds,poses:poses.map(p=>({...p})),obstacles};
+}
+// 仅第 8 步视角过渡结束后启用：只淡化遮挡主角的其他机柜。
+// 人员、工具、外包装、CDU 和机房环境不参与透明处理。
+function updateCabinetVisibility(){
+ const I=installation;if(!I)return;
+ // Pipeline is an overview of all cabinets: never ghost a completed neighbouring cabinet.
+ if(typeof pipeline!=='undefined'&&pipeline?.enabled){
+  for(const context of pipeline.contexts)for(const item of context.occlusion||[]){
+   if(!item.faded)continue;
+   for(const entry of item.original||[]){entry.m.material=entry.material;entry.m.castShadow=entry.shadow;entry.m.renderOrder=entry.order;}
+   item.faded=false;
+  }
+  $('viewport').dataset.transparentOccluders='0';return;
+ }
+ if(I.hero.userData.step!==7||transition){
+  for(const item of I.occlusion||[]){if(!item.faded)continue;for(const entry of item.original||[]){entry.m.material=entry.material;entry.m.castShadow=entry.shadow;entry.m.renderOrder=entry.order;}item.faded=false;}
+  $('viewport').dataset.transparentOccluders='0';return;
+ }
+ scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+ if(!I.occlusion){I.occlusion=[];
+  for(const root of racks){if(root===I.hero||root.userData.referenceId===1)continue;const meshes=[];root.traverse(o=>{if(o.isMesh)meshes.push(o);});I.occlusion.push({root,meshes,box:new THREE.Box3().setFromObject(root),faded:false,original:null});}
+ }
+ const project=box=>{const r={minX:Infinity,maxX:-Infinity,minY:Infinity,maxY:-Infinity,minZ:Infinity,maxZ:-Infinity};for(const x of[box.min.x,box.max.x])for(const y of[box.min.y,box.max.y])for(const z of[box.min.z,box.max.z]){const p=new THREE.Vector3(x,y,z).project(camera);r.minX=Math.min(r.minX,p.x);r.maxX=Math.max(r.maxX,p.x);r.minY=Math.min(r.minY,p.y);r.maxY=Math.max(r.maxY,p.y);r.minZ=Math.min(r.minZ,p.z);r.maxZ=Math.max(r.maxZ,p.z);}return r;};
+ const heroBox=new THREE.Box3().setFromObject(I.hero),target=project(heroBox);let count=0;
+ // 用可见柜面上的射线确认前后关系，避免把未挡住主角的其他机柜透明化。
+ const sightLines=[],ray=new THREE.Raycaster(),visible=o=>{while(o){if(!o.visible)return false;o=o.parent;}return true;};
+ for(let ix=0;ix<5;ix++)for(let iy=0;iy<9;iy++){const uv=new THREE.Vector2(blend(target.minX,target.maxX,(ix+.5)/5),blend(target.minY,target.maxY,(iy+.5)/9));ray.setFromCamera(uv,camera);const hit=ray.intersectObject(I.hero,true).find(h=>visible(h.object));if(hit)sightLines.push({ray:ray.ray.clone(),distance:hit.distance});}
+ for(const item of I.occlusion){const r=project(item.box),overlap=item.root.visible&&item.box.max.y>heroBox.min.y+.06&&r.minZ<target.maxZ-.0001&&r.maxX>target.minX&&r.minX<target.maxX&&r.maxY>target.minY&&r.minY<target.maxY;
+  const fade=overlap&&sightLines.some(line=>{ray.ray.copy(line.ray);ray.far=line.distance-.012;return ray.intersectObject(item.root,true).some(h=>visible(h.object));});
+  if(fade)count++;
+  if(fade!==item.faded||fade){if(!item.original)item.original=item.meshes.map(m=>({m,material:m.material,shadow:m.castShadow,order:m.renderOrder,ghost:Array.isArray(m.material)?m.material.map(v=>v.clone()):m.material.clone()}));for(const entry of item.original){entry.m.material=fade?entry.ghost:entry.material;entry.m.castShadow=fade?false:entry.shadow;entry.m.renderOrder=fade?20:entry.order;if(fade)for(const mat of(Array.isArray(entry.ghost)?entry.ghost:[entry.ghost])){mat.transparent=true;mat.opacity=.045;mat.depthWrite=false;if(!mat.userData.ghostReady){mat.needsUpdate=true;mat.userData.ghostReady=true;}}}item.faded=fade;}
+ }
+ $('viewport').dataset.transparentOccluders=String(count);
+}
+
+function setBeam(mesh,a,b,r=.034){const v1=new THREE.Vector3(...a),v2=new THREE.Vector3(...b),delta=v2.clone().sub(v1);mesh.position.copy(v1).add(v2).multiplyScalar(.5);mesh.scale.set(r,delta.length(),r);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize());}
+// 机柜本体使用 OBB 分离轴检测，扫掠途中遇到已安装柜体则停在最后安全位置。
+function protectCabinet(s){
+ const I=installation,toObb=(x,z,yaw,hx,hz,ox=0,oz=0)=>{const c=Math.cos(yaw),sn=Math.sin(yaw);return{x:x+ox*c+oz*sn,z:z-ox*sn+oz*c,hx,hz,axes:[[c,-sn],[sn,c]]};};
+ const overlaps=(a,b)=>[...a.axes,...b.axes].every(axis=>{const extent=o=>o.hx*Math.abs(axis[0]*o.axes[0][0]+axis[1]*o.axes[0][1])+o.hz*Math.abs(axis[0]*o.axes[1][0]+axis[1]*o.axes[1][1]);return Math.abs((a.x-b.x)*axis[0]+(a.z-b.z)*axis[1])<extent(a)+extent(b)-.0003;});
+ const collides=p=>{const moving=toObb(p.x,p.z,p.yaw,p.unpack<.99?.455:.30425,p.unpack<.99?.98:.795,-.00425,p.unpack<.99?0:-.080);return racks.some(r=>r!==I.hero&&modelVisible(r)&&p.y<r.position.y+2.27&&p.y+2.27>r.position.y&&overlaps(moving,toObb(r.position.x,r.position.z,r.rotation.y,.30425,.740,-.00425,0)));};
+ let safe=I.safeCabinet;const distance=safe?Math.hypot(s.x-safe.x,s.z-safe.z):Infinity;
+ if(safe&&safe.stage===s.stage&&s.p>=safe.p&&s.p-safe.p<.06&&distance<1){const steps=Math.max(1,Math.ceil(distance/.035),Math.ceil(Math.abs(s.yaw-safe.yaw)/.035));for(let j=1;j<=steps;j++){const candidate={...s,x:blend(safe.x,s.x,j/steps),z:blend(safe.z,s.z,j/steps),yaw:blend(safe.yaw,s.yaw,j/steps),y:blend(safe.y,s.y,j/steps)};if(typeof pipeline!=='undefined'&&pipeline?.enabled&&s.stage===4)Object.assign(candidate,installationState(4,blend(safe.p,s.p,j/steps)));if(collides(candidate)){Object.assign(s,{x:I.safeCabinet.x,z:I.safeCabinet.z,y:I.safeCabinet.y,yaw:I.safeCabinet.yaw});$('viewport').dataset.cabinetCollision='blocked';return;}I.safeCabinet=candidate;}}
+ else if(collides(s)){if(safe)Object.assign(s,{x:safe.x,z:safe.z,y:safe.y,yaw:safe.yaw});$('viewport').dataset.cabinetCollision='blocked';return;}
+ I.safeCabinet={...s};$('viewport').dataset.cabinetCollision='clear';
+}
+// 机柜到达拆包点后小车才进场；装车后驶向垃圾点，到站连同货物隐藏。
+function wasteCartState(s){
+ const entering=s.stage===2,q=entering?smooth((s.p-WASTE_CART.enter[0])/(WASTE_CART.enter[1]-WASTE_CART.enter[0])):s.stage<2?0:1;
+ const entry=typeof pipeline!=='undefined'&&pipeline?.enabled?[[-1,10.1],[-2,10.1],[-2,8.425]]:WASTE_CART.entry;
+ const haul=typeof pipeline!=='undefined'&&pipeline?.enabled?[[-2,8.425],[-2,10.1],[-1,10.1]]:MOTION.waste;
+ const at=entering||s.stage<2?routeSample(entry,q):routeSample(haul,s.waste);
+ // 停车和起步朝向一致，避免满载后突然转向。
+ if(s.stage===2||s.stage<2)at.yaw=Math.PI/2;
+ return {...at,y:blend(MOTION.roadY-.03,-.79,smooth((at.z-9.15)/.45)),visible:s.stage>=2&&(s.stage<3||s.stage===3&&s.p<1),removed:s.stage>3||s.stage===3&&s.p>=1};
+}
+// 按纸板旋转后的完整厚度及覆盖范围计算落地高度，避免板边切入散力板。
+function cartonClearance(panel,position,quaternion){
+ const e=new THREE.Matrix4().makeRotationFromQuaternion(quaternion).elements,half=panel.scale.clone().multiplyScalar(.5);
+ const hx=Math.abs(e[0])*half.x+Math.abs(e[4])*half.y+Math.abs(e[8])*half.z;
+ const hy=Math.abs(e[1])*half.x+Math.abs(e[5])*half.y+Math.abs(e[9])*half.z;
+ const hz=Math.abs(e[2])*half.x+Math.abs(e[6])*half.y+Math.abs(e[10])*half.z;
+ let surface=-.86;
+ for(const board of installation.boards){const {base,size}=board.userData,c=Math.abs(Math.cos(board.rotation.y)),s=Math.abs(Math.sin(board.rotation.y)),bx=(size[0]*c+size[2]*s)/2,bz=(size[0]*s+size[2]*c)/2;
+  if(Math.abs(position.x-base[0])<=hx+bx+.003&&Math.abs(position.z-base[2])<=hz+bz+.003)surface=Math.max(surface,base[1]+size[1]/2);
+ }
+ return Math.max(position.y,surface+hy+.006);
+}
+function animateUnpacking(s,waste){
+ const I=installation,stage=s.stage,p=s.p,progress=range=>stage<2?0:stage>2?1:smooth((p-range[0])/(range[1]-range[0])),collect=progress(UNPACKING.collect),film=stage<2?0:stage>2?1:filmLiftMotion(p).removed,pallet=stage<3?0:stage>3?1:smooth((p-UNPACKING.pallet[0])/(UNPACKING.pallet[1]-UNPACKING.pallet[0]));
+ const closedQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),s.yaw),cartQ=new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),waste.yaw);
+ const cargo=(x,y,z)=>new THREE.Vector3(x,y,z).applyQuaternion(cartQ).add(new THREE.Vector3(waste.x,waste.y,waste.z));
+ I.panels.forEach((panel,i)=>{
+  const initial=panel.userData.local.clone().applyQuaternion(closedQ).add(I.hero.position),lay=new THREE.Vector3(...UNPACKING.layPositions[i]);
+  // 四侧先平移脱开柜体，前面板抬过升降工装；顶盖只从上方取出。
+  const t=progress(i===4?UNPACKING.top:[UNPACKING.sides[0]+i*.012,UNPACKING.sides[1]+i*.004]);
+  const horizontalQ=new THREE.Quaternion().setFromEuler(new THREE.Euler(i<2?(i===0?Math.PI/2:-Math.PI/2):0,0,i===2?Math.PI/2:i===3?-Math.PI/2:0));
+  lay.y=cartonClearance(panel,lay,horizontalQ);
+  if(t<.30){panel.position.copy(initial);panel.position.y+=smooth(t/.30)*(i===4?.64:i===1?.75:.12);if(i<4){const direction=new THREE.Vector3(i===2?-1:i===3?1:0,0,i===0?1:i===1?-1:0);panel.position.addScaledVector(direction,smooth(t/.30)*.20);}panel.quaternion.copy(closedQ);}
+  else{const u=smooth((t-.30)/.70),lifted=initial.clone().add(new THREE.Vector3(i===2?-.20:i===3?.20:0,i===4?.64:i===1?.75:.12,i===0?.20:i===1?-.20:0));panel.position.lerpVectors(lifted,lay,u);if(i===1)panel.position.y+=Math.sin(u*Math.PI)*1.0;panel.quaternion.copy(closedQ).slerp(horizontalQ,u);}
+  const stack=cargo(0,.54+i*.041,0),qStack=cartQ.clone().multiply(horizontalQ);
+  if(collect>0){
+   // 平放的纸板沿柜外通道绕行装车，不能横穿机柜或翻转穿过人员。
+   const detour=i===2?[[lay.x,lay.z],[.55,11.8]]:[[lay.x,lay.z],[6.6,lay.z],[6.6,11.8]];const paths=Array.from({length:5},()=>[...detour,[WASTE_CART.park[0],11.8],[waste.x,waste.z]]);
+   const walk=routeSample(paths[i],clamp01((collect-.18)/.64)),carryY=Math.max(lay.y,stack.y)+.65;
+   panel.position.set(walk.x,collect<.18?blend(lay.y,carryY,smooth(collect/.18)):collect>.82?blend(carryY,stack.y,smooth((collect-.82)/.18)):carryY,walk.z);panel.quaternion.copy(horizontalQ).slerp(qStack,smooth((collect-.82)/.18));
+  }if(stage>=2)panel.position.y=cartonClearance(panel,panel.position,panel.quaternion);panel.visible=!waste.removed;
+ });
+ // 薄膜顶缘固定、底缘逐渐上升；卷边随揭膜高度上移，随后揉成一束装车。
+ I.innerFilm.quaternion.copy(closedQ);I.innerFilm.scale.set(1,Math.max(.001,1-film),1);I.innerFilm.position.copy(I.hero.position).add(new THREE.Vector3(0,2.32*film,0));I.innerFilm.visible=film<1;
+ I.filmRoll.quaternion.copy(closedQ);I.filmRoll.position.copy(I.hero.position).add(new THREE.Vector3(0,2.32*film,0));I.filmRoll.visible=stage===2&&film>0&&film<1;
+ I.filmBundle.visible=film>=1&&!waste.removed;const bundleLift=stage===2?smooth((p-.65)/.03):1;I.filmBundle.position.copy(I.hero.position).add(new THREE.Vector3(.12,2.48,0));I.filmBundle.position.lerp(new THREE.Vector3(6.60,-.70,9.20),bundleLift);I.filmBundle.position.lerp(cargo(0,.84,.1),collect);I.filmBundle.quaternion.copy(cartQ);
+ // 木栈板从机柜下方撤出，再进入同一辆清运车。
+ const under=stage<2?I.hero.position.clone().add(new THREE.Vector3(0,-UNPACKING.palletHeight,0)):new THREE.Vector3(3,stage===2?s.y-UNPACKING.palletHeight:MOTION.roadY,MOTION.unpackZ);
+ I.pallet.position.copy(under);I.pallet.quaternion.copy(stage<2?closedQ:new THREE.Quaternion());
+ if(pallet>0){const dest=cargo(0,1.01,0),walk=routeSample([[3,MOTION.unpackZ],[3,10.8],[WASTE_CART.park[0],10.8],[waste.x,waste.z]],clamp01((pallet-.18)/.64));I.pallet.position.set(walk.x,pallet<.18?blend(MOTION.roadY,-.10,smooth(pallet/.18)):pallet>.82?blend(-.10,dest.y,smooth((pallet-.82)/.18)):-.10,walk.z);I.pallet.quaternion.slerp(cartQ,smooth((pallet-.82)/.18));}
+ I.pallet.visible=!waste.removed;
+ I.unpackSupports.visible=false;
+ $('viewport').dataset.packagingPhase=stage<2?'wrapped':stage===2?(p<.46?'carton':p<.68?'film':'collect'):stage===3?(p<.60?'push-off-pallet':p<.90?'pallet':'haul'):'removed';
+ $('viewport').dataset.filmRemoval=film.toFixed(3);
+}
+
+function applyInstallation(stage,p){
+ if(!installation)return;const I=installation,s=installationState(stage,p),seconds=(STEPS.slice(0,stage).reduce((n,v)=>n+v.duration,0)+p*STEPS[stage].duration)/1000;
+ protectCabinet(s);
+ I.hero.position.set(s.x,s.y,s.z);I.hero.rotation.set(s.pitch,s.yaw,0);I.hero.userData.step=stage;
+ I.boards.forEach((board,i)=>{const f=stage>0?1:clamp01(p*(I.boards.length+2)-i),{base,size}=board.userData;board.visible=f>0;board.scale.set(...size);board.position.y=base[1]+(1-smooth(f))*.18;});
+ I.deck.position.y=s.liftY+.79;const height=I.deck.position.y-.055,spread=Math.sqrt(Math.max(.1,1.38*1.38-(height-.08)**2))/2;
+ I.liftBeams.forEach(beam=>{const{x,reverse}=beam.userData;setBeam(beam,[x,.08,reverse?spread:-spread],[x,height,reverse?-spread:spread]);});setBeam(I.piston,[0,.08,.54],[0,height,-.30],.035);
+ I.bridge.visible=stage>4||stage===4&&p>=.40;I.loadRamp.visible=stage<=3;
+ const jackRetreat=stage===2?smooth((p-.06)/.08):stage>2?1:0;const park=routeSample([[3,MOTION.unpackZ],[3,11.9],[8,11.9]],jackRetreat);I.jack.position.set(stage>=2?park.x:s.x,MOTION.roadY,stage>=2?park.z:s.z);I.jack.rotation.y=stage>=2?park.yaw:s.yaw;I.jack.visible=stage<4;I.palletRamp.visible=stage===3&&p<.70;
+ const waste=wasteCartState(s);I.wasteCart.position.set(waste.x,waste.y,waste.z);I.wasteCart.rotation.y=waste.yaw;I.wasteCart.visible=waste.visible;$('viewport').dataset.wasteCart=waste.removed?'removed':stage<2?'waiting':stage===2&&p<.12?'entering':s.waste>0?'hauling':'parked';
+ animateUnpacking(s,waste);
+ const rearOffsets=[[0,1.45],[-.78,.30],[.78,.30],[-.78,-.72]],intents=[];
+ I.workers.forEach((worker,i)=>{
+  worker.visible=stage!==0&&(stage<5||i<2);
+  let local=rearOffsets[i],x=s.x+local[0]*Math.cos(s.yaw)+local[1]*Math.sin(s.yaw),z=s.z-local[0]*Math.sin(s.yaw)+local[1]*Math.cos(s.yaw),y=stage>=5?MOTION.floorY:MOTION.roadY,yaw=s.yaw+Math.PI,gait=s.walking?seconds*7:0,push=stage===1||stage===3||stage===4&&p>.4,reach=false;
+  if(stage===0){const at=routeSample(MOTION.transport,clamp01(p+(i-1.5)*.055));x=at.x+(i%2?.60:-.60);z=at.z+.2;yaw=at.yaw;gait=p>0&&p<1?seconds*6:0;push=true;}
+  if(stage===2){const end=UNPACK_CREW[i],paths=[[[x,z],[3,9.75],end],[[x,z],[1.95,z],end],[[x,z],[4.35,z],end],[[x,z],[1,z],end]],walk=routeSample(paths[i],smooth(p/.12));x=walk.x;z=walk.z;yaw=Math.atan2(s.x-x,s.z-z);gait=p<.12?seconds*7:0;push=p<.90;reach=p>.46&&p<.65;}
+  if(stage===3){
+   const offset=[[0,1.35],[-.82,.65],[.82,.65],[-.82,1.50]][i],start=.34+i*.025;
+   const gather=smooth(p/.15);x=blend(UNPACK_CREW[i][0],s.x+offset[0],gather);z=blend(UNPACK_CREW[i][1],s.z+offset[1],gather);yaw=Math.PI;y=MOTION.roadY;push=p<start;
+   if(p>=start){const initial=installationState(3,start),end=RECEIVING[i],path=[[initial.x+offset[0],initial.z+offset[1]],[initial.x+offset[0],7.5+i*.15],[1.35,7.5+i*.15],[1.35,4.6],[1.6,3],[end[0],2.65],[end[0],end[1]]],walk=routeSample(path,smooth((p-start)/(1-start)));x=walk.x;z=walk.z;y=x<1.95&&z>3?blend(MOTION.roadY,MOTION.floorY,clamp01((4.6-z)/1.6)):z<=3?MOTION.floorY:MOTION.roadY;yaw=walk.yaw+Math.PI;gait=p<1?seconds*7:0;}
+  }
+  if(stage===4){
+   const wait=RECEIVING[i];x=wait[0];z=wait[1];y=MOTION.floorY;yaw=0;push=false;gait=0;
+   if(p>.60&&s.z<3){const t=smooth((3-s.z)/.7),lx=local[0],lz=local[1],q=smooth((p-.60)/.40);x=blend(x,s.x+lx*Math.cos(s.yaw)+lz*Math.sin(s.yaw),t);z=blend(z,s.z-lx*Math.sin(s.yaw)+lz*Math.cos(s.yaw),t);push=true;gait=seconds*7;yaw=s.yaw+Math.PI;
+    if(q>.78){const end=[[-3.55,1.0],[-3.55,1.90],[-2.95,1.90],[-2.27,1.90]][i],t=smooth((q-.78)/.22);x=blend(x,end[0]+(I.pipelineOffset||0),t);z=blend(z,end[1],t);yaw=Math.atan2(s.x-x,s.z-z);}}
+  }
+  if(stage>=5){const end=[[-3.55,1.0],[-3.55,1.90],[-2.95,1.90],[-2.27,1.90]][i];x=end[0];z=end[1];yaw=Math.atan2(s.x-x,s.z-z);push=stage===5;gait=0;if(stage===5&&i<2){worker.rotation.z=0;}if(stage===6&&i===1){const t=clamp01((p-.15)/.15)*(1-clamp01((p-.84)/.10));const climbing=p<.30||p>.84,body=ladderBody(t);x=climbing?-2.95:p>.82?blend(-2.32,-2.95,smooth((p-.82)/.02)):blend(-2.95,-2.32,s.cables/6);z=1.76+body.z;y=MOTION.floorY+body.y;yaw=Math.PI;reach=p>=.30&&p<=.82;if(p<.15||p>.94){const q=p<.15?smooth(p/.15):1-smooth((p-.94)/.06),walk=routeSample([end,[-3.55,3.32],[-2.95,3.32]],q);x=walk.x;z=walk.z;y=MOTION.floorY;gait=seconds*7;yaw=walk.yaw+(p<.15?Math.PI:0);}}if(stage===7&&i<2){const walk=routeSample([end,[-3.86,end[1]],[-3.86,-.43-i*.82]],smooth(p/.12));x=walk.x;z=walk.z;yaw=p<.12?walk.yaw+Math.PI:0;gait=p<.12?seconds*7:0;push=p>=.12;}}
+  if(stage>=5){x+=I.pipelineOffset||0;if(stage!==6)yaw=Math.atan2(s.x-x,s.z-z);}
+  intents.push({x,y,z,yaw,gait,push,reach,stair:stage===6&&i===1&&p>=.15&&p<=.94&&(p<.30||p>.84)?{progress:clamp01((p-.15)/.15)*(1-clamp01((p-.84)/.10)),origin:{x:-2.95+(I.pipelineOffset||0),y:MOTION.floorY,z:1.76}}:null,kneel:(stage===5||stage===7)&&i<2?smooth((p-(stage===7?.12:0))/.12)*(1-smooth((p-.94)/.06)):0});
+ });
+ resolveWorkers(intents,s,seconds);
+ updateFixing(s);
+ I.wrench.visible=stage===5&&p<1;I.wrench.rotation.z=stage===5?Math.sin(seconds*5)*.6:0;
+ I.workPlatform.visible=stage>=6;I.workPlatform.position.set((I.pipelineOffset||0)+(stage===6?blend(blend(-.5,-2.65,smooth(p/.15)),-.5,smooth((p-.94)/.06)):-.5),MOTION.floorY,1.76);
+ I.wires.forEach((wire,i)=>{const amount=clamp01(s.cables-i);wire.visible=amount>0;wire.geometry.setDrawRange(0,Math.floor(wire.userData.indexCount*amount/6)*6);I.plugs[i].material=amount===1?M.ground:M.steel;});
+ updatePipeConnection(s);scene.userData.flow.mesh.visible=s.hoses>=2;
+ const actions=[['沿路线逐块铺板 · 柜位前停止','散力板已铺设至柜位前'],['4 名施工人员使用地牛搬运带包装机柜','地牛在转角转向后停稳'],[p<.10?'地牛降下带栈板机柜并退出':p<.24?'向上移走纸箱顶盖，拆开四侧纸板':p<.46?'前后左右四面向外拆除并放倒':p<.68?'青蓝色内膜从下往上揭除并收卷':p<.90?'纸箱与薄膜装车，栈板留在柜底':'拆包完成，等待推柜上升降机后清运栈板','转角处拆包完成 · 栈板原位保留'],[p<.60?'从转角处推柜离开栈板，经坡板送上升降机':p<.90?'机柜已上平台，人员进入机房接应；栈板装车':'纸箱、薄膜与栈板一并清运','机柜已上平台 · 人员在机房内接应'],[p<.12?'机房内人员等待，升降平台保持无人':p<.40?'液压剪叉展开，机柜升至静电地板高度':p<.60?'平台对接，人员在机房内接应':'4 名施工人员推行机柜至 9 号柜位','机柜已到达 9 号柜位'],[I.fixingAction,'2 人完成调平 · 前后各 2 颗 M12 已固定'],['逐根连接顶部工业连接器 · '+Math.floor(s.cables)+' / 6 根','6 / 6 根已连接 · 未送电'],['连接二次侧供回液至 Manifold · '+Math.floor(s.hoses)+' / 2 路','供液 / 回液已连接 · 待检验']];
+ const action=actions[stage][p>=1?1:0];if(I.lastAction!==action){$('action-label').textContent=action;I.lastAction=action;}$('action-counter').textContent=String(stage+1).padStart(2,'0')+' / 08';
+ // 暴露语义化的演示进度，便于无障碍技术读取与状态验证。
+ $('viewport').dataset.installationStage=String(stage+1);$('viewport').dataset.connectedCables=String(Math.floor(s.cables));$('viewport').dataset.connectedHoses=String(Math.floor(s.hoses));$('viewport').dataset.collisionProtection='active';
+}
+
+function buildAnchors(){
+ STEPS.forEach((s,step)=>s.anchors.forEach((p,index)=>{const group=new THREE.Group();group.position.fromArray(p);group.visible=labelsVisible;scene.add(group);const color=s.risk==='高'?'#f34b46':'#4d7cc4';const dot=new THREE.Mesh(new THREE.SphereGeometry(.065,12,8),new THREE.MeshBasicMaterial({color}));group.add(dot);const ring=new THREE.Mesh(new THREE.RingGeometry(.1,.12,32),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.65,side:THREE.DoubleSide,depthWrite:false}));group.add(ring);anchorMarkers.push({group,ring,step});const el=document.createElement('button');el.className='anchor '+(s.risk==='高'?'high':'')+(current===step?' selected':'');el.innerHTML=`<i>${String(step+1).padStart(2,'0')}</i><span>${index?(step===2?'包装清运':step===4?'9 号柜位':s.name):s.name}</span>`;el.setAttribute('aria-label',`工序 ${step+1} ${s.name}，${s.risk}风险`);el.onclick=()=>{setPlaying(false);demoStarted=true;selectStep(step);};el.onpointerenter=e=>showTooltip(e,step);el.onpointermove=positionTooltip;el.onpointerleave=()=>{$('tooltip').style.display='none';};el.onfocus=()=>{const r=el.getBoundingClientRect();showTooltip({clientX:r.x+r.width/2,clientY:r.y},step);};el.onblur=()=>{$('tooltip').style.display='none';};$('anchors').append(el);anchors.push({el,step,position:new THREE.Vector3(...p),projected:new THREE.Vector3()});}));
+}
+function showTooltip(e,step){const s=STEPS[step];$('tooltip').innerHTML=`<span class="badge ${riskClass(s)}">${s.risk}风险</span><strong>${s.name}</strong><p>${s.summary}</p><small>点击查看完整作业注意事项</small>`;$('tooltip').style.display='block';positionTooltip(e);}
+function positionTooltip(e){const r=$('tooltip').getBoundingClientRect();const x=Math.max(8,Math.min(e.clientX+16,innerWidth-r.width-12));const y=e.clientY+r.height+20>innerHeight?e.clientY-r.height-14:e.clientY+18;$('tooltip').style.left=x+'px';$('tooltip').style.top=Math.max(8,y)+'px';}
+// 元数据与模型分开登记，新增模型时可直接补充字段。
+function registerModelInfo(){
+ const I=installation,add=(object,name,fields)=>{object.userData.modelInfo={name,fields};if(!selectables.includes(object))selectables.push(object);};
+ add(scene.userData.hotAisle,'封闭热通道模块',[['布置','两列机柜背面相对，分列热通道两侧'],['围护','透明顶板、两端玻璃门'],['地板','透明玻璃地板，预留软管穿板孔'],['二次侧主管','地板下方 600 mm']]);
+ for(const rack of racks)add(rack,(rack.userData.referenceId===9?'演示液冷机柜':'机柜')+' · '+rack.userData.referenceId+' 号',[['设备编号',String(rack.userData.referenceId).padStart(2,'0')],['尺寸（宽 × 高 × 深）','0.60 × 2.25 × 1.40 m'],['用途',rack.userData.referenceId===9?'安装流程演示主机柜':'机房固定设备']]);
+ add(I.manifold,'机柜 Manifold',[['功能','供水 / 回水分配'],['接口','后侧左边底部 2 个，均朝向地面'],['连接方式','二次侧软管从下方接入']]);
+ add(I.secondary,'二次侧供回水管路',[['布置','两列机柜之间'],['中心标高','静电地板完成面下 600 mm'],['管路数量','供水、回水各 1 路']]);
+ add(I.jack,'机柜搬运地牛',[['用途','在散力板上搬运带包装机柜'],['协作人员','4 人']]);
+ add(I.lift,'液压升降机',[['用途','将机柜抬升至机房静电地板高度'],['组成','台面、剪叉、液压支承'],['作业方式','人员在机房内接应']]);
+ add(I.wasteCart,'包装搬运小车',[['停放位置','走廊转角前散力板上'],['用途','收集纸箱、薄膜及栈板'],['清运','到达垃圾清理点后退出场景']]);
+ add(I.pallet,'运输栈板',[['材质','木质'],['移除时机','机柜推上升降机之后']]);
+ add(I.innerFilm,'内层塑料薄膜',[['材质','青蓝色塑料薄膜'],['拆除方向','从下向上']]);
+ I.panels.forEach((m,i)=>add(m,'外包装纸板 · '+['前','后','左','右','顶'][i]+'面',[['材质','纸箱'],['拆除方式',i===4?'向上取出':'向外拆开并放倒']]));
+ I.boards.forEach((m,i)=>add(m,'散力板 · '+String(i+1).padStart(2,'0'),[['区域',m.userData.zone==='inside'?'机房内':'机房外走廊'],['铺设方向','长边平行搬运方向'],['用途','分散运输荷载']]));
+ I.workers.forEach((m,i)=>add(m,'施工人员 · '+(i+1),[['角色','搬运及安装协作'],['防护装备','黄色安全帽'],['人员配置','搬运 4 人 / 落位后安装 2 人']]));
+ I.hoses.forEach((m,i)=>add(m,i===0?'供水连接软管':'回水连接软管',[['连接对象','二次侧主管 ↔ Manifold 底部接口'],['接入方向','从下方竖直接入']]));
+ I.wires.forEach((m,i)=>add(m,'电源线 · '+(i<3?'A':'B')+(i%3+1),[['回路',(i<3?'A':'B')+' 路'],['连接对象','机柜顶部工业连接器']]));
+ I.bolts.forEach((m,i)=>add(m,'机柜固定螺丝 · '+(i+1),[['规格','M12'],['布置','前后短边各 2 颗'],['边距','中心距相邻两边各 50 mm']]));
+ add(I.workPlatform,'接电作业平台',[['用途','协助连接顶部工业连接器']]);
+ for(const object of selectables)if(!object.userData.modelInfo&&object.userData.step===6)add(object,'顶部工业连接器',[['用途','连接机柜电源线'],['回路配置','A / B 路各 3 个']]);
+}
+function modelOwner(object){while(object&&!object.userData.modelInfo)object=object.parent;return object;}
+
+function openModelInfo(object){
+ const info=object.userData.modelInfo;if(!info)return;
+ setPlaying(false);transition=null;if(controls)controls.autoRotate=false;
+ $('model-info-title').textContent=info.name;const fields=$('model-info-fields');fields.replaceChildren();
+ const position=object.getWorldPosition(new THREE.Vector3());
+ for(const [label,value] of [...info.fields,['场景位置 X / Y / Z',position.toArray().map(v=>v.toFixed(2)).join(' / ')+' m']]){const term=document.createElement('dt'),detail=document.createElement('dd');term.textContent=label;detail.textContent=value;fields.append(term,detail);}
+ $('model-info').showModal();
+}
+function bindSceneInteraction(){
+ const ray=new THREE.Raycaster(),mouse=new THREE.Vector2(),canvas=renderer.domElement;let down=null,pendingClick=null;
+ const pick=e=>{const r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(mouse,camera);return ray.intersectObjects(selectables,true).find(hit=>modelVisible(hit.object));};
+ canvas.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});
+ canvas.addEventListener('pointerup',e=>{if(ramp?.enabled)return;if(!down||Math.hypot(e.clientX-down.x,e.clientY-down.y)>5||e.button!==0)return;down=null;const hit=pick(e);if(!hit)return;clearTimeout(pendingClick);pendingClick=setTimeout(()=>{let object=hit.object;while(object&&object.userData.step===undefined)object=object.parent;if(object){let owner=hit.object;while(owner&&owner.userData.pipelineIndex===undefined)owner=owner.parent;if(pipeline?.enabled&&owner){focusPipeline(owner.userData.pipelineIndex);return;}setPlaying(false);demoStarted=true;selectStep(object.userData.step);}},500);});
+ canvas.addEventListener('dblclick',e=>{if(ramp?.enabled)return;if(e.button!==0)return;e.preventDefault();clearTimeout(pendingClick);const hit=pick(e),object=hit&&modelOwner(hit.object);if(object)openModelInfo(object);});
+ canvas.addEventListener('pointermove',e=>{if(e.buttons)return;canvas.style.cursor=pick(e)?'pointer':'grab';});
+ $('close-model-info').onclick=()=>$('model-info').close();
+ $('model-info').addEventListener('click',e=>{if(e.target!==$('model-info'))return;const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();});
+ $('model-info').addEventListener('close',()=>{if(controls)controls.autoRotate=autoRotate&&!playing;});
+}
+
+function easeInOutCubic(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+// 资源调度与模型动画分开：四台机柜共享一个门口工位、一台升降机和一辆清运车。
+function createPipelineSchedule(){return {time:0,liftReady:0,owners:{lift:1,corner:2,cart:2,install:0},lastLift:1,jobs:[5,4,2,1].map((stage,i)=>({index:i,stage,p:0,wait:'',done:false}))};}
+function advancePipeline(ms,state=pipeline.schedule){
+ let remaining=ms;while(remaining>0){const dt=Math.min(remaining,40);remaining-=dt;state.time+=dt;
+  for(const job of state.jobs){if(job.done)continue;const id=job.index;job.wait='';
+   if(job.stage===1&&job.p>=.15&&(state.owners.corner!==null||state.owners.cart!==null)){job.wait='等待拆包工位 / 清运车';continue;}
+   if(job.stage===2){if(state.owners.corner!==null&&state.owners.corner!==id||state.owners.cart!==null&&state.owners.cart!==id){job.wait='等待拆包工位 / 清运车';continue;}state.owners.corner=id;state.owners.cart=id;}
+   if(job.stage===3||job.stage===4){if(state.owners.lift!==null&&state.owners.lift!==id||state.time<state.liftReady){job.wait='等待升降机';continue;}state.owners.lift=id;state.lastLift=id;}
+   if(job.stage>=5){if(state.owners.install!==null&&state.owners.install!==id){job.wait='等待安装组（2 人）';continue;}state.owners.install=id;}
+   const limit=job.stage===1&&(state.owners.corner!==null||state.owners.cart!==null)?.15:1;job.p=Math.min(limit,job.p+dt/STEPS[job.stage].duration);
+   if(job.p>=1-1e-9){
+    if(job.stage===3){state.owners.corner=null;state.owners.cart=null;}
+    if(job.stage===4){state.owners.lift=null;state.liftReady=state.time+4000;}
+    if(job.stage===7){job.done=true;job.p=1;state.owners.install=null;}else{job.stage++;job.p=0;}
+   }
+  }
+ }
+}
+function initPipeline(){
+ const base=installation,mainScene=scene,baseFlow=scene.userData.flow,baseSelect=[...selectables],baseRacks=[...racks],basePaths=[...flowPaths],D=base.fixDetail;
+ pipeline={enabled:false,labels:true,focus:0,base,contexts:[base],roots:[],schedule:createPipelineSchedule(),reserved:baseRacks.filter(r=>[10,11,12].includes(r.userData.referenceId))};
+ base.pipelineFlow=baseFlow;
+ for(let i=1;i<4;i++){
+  const temp=new THREE.Scene();temp.environment=mainScene.environment;scene=temp;selectables.length=0;racks.length=0;flowPaths.length=0;buildEquipment(i*.615,9+i,false);const I=installation;I.fixDetail=D;I.pipelineFlow=temp.userData.flow;
+  const root=new THREE.Group();root.name='pipeline-cabinet-'+i;root.visible=false;mainScene.add(root);
+  const objects=new Set();for(const value of Object.values(I)){if(value?.isObject3D&&value.parent===temp)objects.add(value);if(Array.isArray(value))for(const item of value)if(item?.isObject3D&&item.parent===temp)objects.add(item);}
+  for(const item of selectables)if(item.parent===temp)objects.add(item);objects.add(I.pipelineFlow.mesh);
+  for(const item of objects){root.add(item);item.userData.pipelineIndex=i;}box(root,.60,.08,.24,MOTION.target[0]+i*.615,3.32,1.40,M.steel);
+  I.hero.userData.modelInfo={name:String.fromCharCode(65+i)+' 柜 · '+(9+i)+' 号',fields:[['尺寸','0.60 × 2.25 × 1.40 m'],['作业模式','流水线并行施工']]};
+  I.pipelineRoot=root;pipeline.roots.push(root);pipeline.contexts.push(I);
+ }
+ scene=mainScene;installation=base;scene.userData.flow=baseFlow;selectables.length=0;selectables.push(...baseSelect);racks.length=0;racks.push(...baseRacks);flowPaths.length=0;flowPaths.push(...basePaths);
+ pipeline.contexts.reverse();pipeline.contexts.forEach((I,i)=>{if(I.pipelineRoot)I.pipelineRoot.traverse(o=>{if(o.userData.pipelineIndex!==undefined)o.userData.pipelineIndex=i;});I.hero.userData.modelInfo??={fields:[['尺寸','0.60 × 2.25 × 1.40 m']]};I.hero.userData.modelInfo.name=String.fromCharCode(65+i)+' 柜 · '+I.slot+' 号';I.hero.userData.pipelineIndex=i;I.workers.forEach(w=>w.userData.pipelineIndex=i);if(I!==base){racks.push(I.hero);selectables.push(I.hero,...I.workers,I.jack,I.lift,I.wasteCart,...I.hoses);}});
+ const rows=$('pipeline-rows');rows.replaceChildren();pipeline.contexts.forEach((I,i)=>{const b=document.createElement('button');b.className='pipeline-row';b.id='pipeline-row-'+i;b.onclick=()=>focusPipeline(i);b.innerHTML='<strong>'+String.fromCharCode(65+i)+' 柜 · '+I.slot+' 号位</strong><span id="pipeline-status-'+i+'"></span><small id="pipeline-job-'+i+'"></small><div class="pipeline-meter"><i id="pipeline-progress-'+i+'"></i></div>';rows.append(b);const tag=document.createElement('button');tag.className='cabinet-tag';tag.id='pipeline-tag-'+i;tag.onclick=()=>focusPipeline(i);$('pipeline-labels').append(tag);});
+}
+function startPipeline(){
+ pipeline.enabled=true;pipeline.schedule=createPipelineSchedule();pipeline.focus=0;pipeline.lastStage=-1;pipeline.contexts.forEach(I=>{I.safeCabinet=null;I.collisionFrame=null;});pipeline.roots.forEach(r=>r.visible=true);pipeline.reserved.forEach(r=>r.visible=false);$('pipeline-board').hidden=false;$('pipeline-mode').textContent='切回单柜';demoStarted=true;demoFinished=false;renderPipeline();
+}
+function stopPipeline(){if(!pipeline)return;pipeline.enabled=false;pipeline.roots.forEach(r=>r.visible=false);pipeline.reserved.forEach(r=>r.visible=true);installation=pipeline.base;scene.userData.flow=installation.pipelineFlow;$('pipeline-board').hidden=true;$('pipeline-mode').textContent='流水线模式';for(let i=0;i<4;i++)$('pipeline-tag-'+i).hidden=true;installation.lift.visible=true;installation.secondary.visible=true;installation.safeCabinet=null;installation.collisionFrame=null;}
+function focusPipeline(index){if(!pipeline?.enabled)return;pipeline.focus=index;pipeline.lastStage=-1;renderPipeline();}
+function resolvePipelineCrews(){
+ const P=pipeline,people=[];
+ for(const job of P.schedule.jobs){const I=P.contexts[job.index];I.workers.forEach((w,i)=>{if(w.visible){const q=I.collisionFrame.poses[i];people.push({w,q,I,job,r:.35+.32*Math.sqrt(q.kneel||0)});}});}
+ // 单柜避碰之后再做跨作业组检测，蹲姿保留膝部操作空间。
+ for(let pass=0;pass<70;pass++){
+  for(let i=0;i<people.length;i++)for(let j=i+1;j<people.length;j++){const a=people[i],b=people[j];if(Math.abs(a.q.y-b.q.y)>1.65)continue;let dx=b.q.x-a.q.x,dz=b.q.z-a.q.z,d=Math.hypot(dx,dz),min=a.r+b.r+.025;if(d<min){if(d<.00001){dx=1;dz=0;d=1;}const delta=(min-Math.hypot(b.q.x-a.q.x,b.q.z-a.q.z))/2+.0001;a.q.x-=dx/d*delta;a.q.z-=dz/d*delta;b.q.x+=dx/d*delta;b.q.z+=dz/d*delta;}}
+  for(const a of people)for(const obstacle of a.I.collisionFrame.obstacles)pushOut(a.q,obstacle,a.r);
+ }
+ for(const a of people){installation=a.I;const s=installationState(a.job.stage,a.job.p);poseWorker(a.w,a.q,a.I.collisionFrame.obstacles,s);}
+}
+function renderPipeline(){
+ if(!pipeline?.enabled)return;const P=pipeline,S=P.schedule,order=[0,1,2,3].filter(i=>i!==P.focus).concat(P.focus),D=P.base.fixDetail;
+ // 先设置各柜真实位置，使所有实例的避碰判断看到同一时刻的机柜。
+ for(const job of S.jobs){installation=P.contexts[job.index];const s=installationState(job.stage,job.p);installation.hero.position.set(s.x,s.y,s.z);installation.hero.rotation.set(s.pitch,s.yaw,0);}
+ for(const i of order){const job=S.jobs[i],I=P.contexts[i];installation=I;scene.userData.flow=I.pipelineFlow;I.fixDetail=null;applyInstallation(job.stage,job.p);I.pipelineCollision=$('viewport').dataset.cabinetCollision;I.fixDetail=D;
+  I.boards.forEach(b=>b.visible=i===0);I.secondary.visible=i===0;I.lift.visible=i===S.lastLift;I.bridge.visible=i===S.owners.lift&&job.stage===4&&job.p>=.4;I.loadRamp.visible=i===S.owners.lift&&job.stage===3;I.wasteCart.visible=i===S.owners.cart&&I.wasteCart.visible;I.workPlatform.visible=i===S.owners.install&&job.stage===6;
+  if(job.done||job.wait&&job.stage>=5)I.workers.forEach(w=>w.visible=false);
+  if(job.wait&&job.stage===1)I.workers.forEach(w=>{w.userData.gait=0;});
+  $('pipeline-status-'+i).textContent=job.done?'已完成':job.wait?'等待工位':'施工中';$('pipeline-job-'+i).textContent=job.done?'连接完成 · 待检验':job.wait||STEPS[job.stage].name+' · '+(job.stage>=5?'安装组 2 人':job.stage===2?'拆包组 4 人':'搬运组 4 人');$('pipeline-progress-'+i).style.width=((job.stage+job.p)/8*100)+'%';$('pipeline-row-'+i).classList.toggle('active',i===P.focus);
+ }
+ // 空闲升降机缓慢降回走廊高度，下降结束后才可交接。
+ if(S.owners.lift===null&&S.time<S.liftReady){const I=P.contexts[S.lastLift],t=smooth(1-(S.liftReady-S.time)/4000),liftY=blend(MOTION.floorY,MOTION.liftLow,t);I.deck.position.y=liftY+.79;const height=I.deck.position.y-.055,spread=Math.sqrt(Math.max(.1,1.38*1.38-(height-.08)**2))/2;I.liftBeams.forEach(beam=>{const{x,reverse}=beam.userData;setBeam(beam,[x,.08,reverse?spread:-spread],[x,height,reverse?-spread:spread],.034);});}
+ resolvePipelineCrews();installation=P.contexts[P.focus];scene.userData.flow=installation.pipelineFlow;const job=S.jobs[P.focus];current=job.stage;tourElapsed=job.p*STEPS[current].duration;completed=new Set(Array.from({length:job.done?8:job.stage},(_,i)=>i));
+ if(P.lastStage!==current||P.lastFocus!==P.focus){renderUI();$('detail-location').textContent=STEPS[current].area.replace('9 号',String(P.contexts[P.focus].slot)+' 号');P.lastStage=current;P.lastFocus=P.focus;}
+ if(job.wait)$('action-label').textContent=String.fromCharCode(65+P.focus)+' 柜 · '+job.wait;
+ const name=id=>id===null?'空闲':String.fromCharCode(65+id)+' 柜';$('pipeline-resources').textContent='升降机：'+name(S.owners.lift)+' ｜ 清运车：'+name(S.owners.cart)+' ｜ 安装组：'+name(S.owners.install)+' ｜ 已完成 '+S.jobs.filter(j=>j.done).length+'/4 · 点柜号切换观察，点工序进入单柜';
+ updatePipelineLabels();
+}
+function updatePipelineLabels(){if(!pipeline?.enabled)return;const w=$('viewport').clientWidth,h=$('viewport').clientHeight;pipeline.contexts.forEach((I,i)=>{const tag=$('pipeline-tag-'+i),job=pipeline.schedule.jobs[i],p=I.hero.position.clone().add(new THREE.Vector3(0,2.55,0)).project(camera);tag.hidden=!pipeline.labels||p.z<-1||p.z>1||Math.abs(p.x)>1||Math.abs(p.y)>1;tag.style.left=((p.x*.5+.5)*w)+'px';tag.style.top=((-p.y*.5+.5)*h)+'px';tag.textContent=String.fromCharCode(65+i)+' 柜（'+I.slot+'号） · '+(job.done?'已完成':job.wait?'等待':STEPS[job.stage].name);tag.classList.toggle('active',i===pipeline.focus);});}
+function moveCamera(position,target,span=OVERVIEW.span){if(playing)return;controls.autoRotate=false;controls.enableDamping=false;controls.update();controls.enableDamping=true;transition={start:performance.now(),from:camera.position.clone(),fromTarget:controls.target.clone(),fromSpan:camera.userData.span,fromZoom:camera.zoom,to:new THREE.Vector3(...position),toTarget:new THREE.Vector3(...target),toSpan:span};}
+
+// Alternate transport scene: positions are in metres; +X is uphill, +Z is rail side.
+const RAMP={length:.8/Math.sin(8*Math.PI/180),width:2.2,rise:.8,angle:8*Math.PI/180,duration:44,start:1.55,end:.8/Math.tan(8*Math.PI/180)+1.08,
+ pullOffsets:[1.45,2.40,3.35],camera:[-9.4,7.65,10.3],target:[4.7,.85,.3],span:8.3};
+function rampFloor(x){return THREE.MathUtils.clamp(x/Math.sqrt(RAMP.length**2-RAMP.rise**2),0,1)*RAMP.rise;}
+function rampCamera(){transition=null;camera.position.fromArray(RAMP.camera);controls.target.fromArray(RAMP.target);camera.zoom=1;camera.userData.span=RAMP.span;camera.lookAt(controls.target);controls.update();resize();}
+function switchTransport(enabled){
+ if(!loaded||!!ramp?.enabled===enabled)return;setPlaying(false);
+ if(enabled){const savedAction=$('action-label').textContent;if(!ramp)buildRamp();ramp.saved={position:camera.position.clone(),target:controls.target.clone(),span:camera.userData.span,zoom:camera.zoom,action:savedAction,started:demoStarted,finished:demoFinished,rotate:autoRotate,pipelineEnabled:!!pipeline?.enabled,current,tourElapsed};ramp.enabled=true;if(!ramp.notes)initRampNotes();ramp.time=0;ramp.flowPhase=null;ramp.lastRoomTime=null;ramp.lastTransportTime=null;transition=null;autoRotate=false;controls.autoRotate=false;demoStarted=true;demoFinished=false;document.body.classList.add('ramp-mode','details-hidden');$('ramp-summary').hidden=false;rampCamera();poseRamp(0);setPlaying(true);}
+ else{ramp.enabled=false;document.body.classList.remove('ramp-install');if(ramp.saved.pipelineEnabled&&pipeline){pipeline.enabled=true;$('pipeline-board').hidden=false;$('pipeline-mode').textContent='切回单柜';pipeline.roots.forEach(r=>r.visible=true);pipeline.reserved.forEach(r=>r.visible=false);}current=ramp.saved.current;tourElapsed=ramp.saved.tourElapsed;document.body.classList.remove('ramp-mode');$('ramp-summary').hidden=true;camera.position.copy(ramp.saved.position);controls.target.copy(ramp.saved.target);camera.userData.span=ramp.saved.span;camera.zoom=ramp.saved.zoom;camera.lookAt(controls.target);controls.update();resize();demoFinished=false;renderUI();if(pipeline?.enabled)renderPipeline();else applyInstallation(current,tourElapsed/STEPS[current].duration);document.getElementById("action-label").textContent=ramp.saved.action;demoStarted=ramp.saved.started;demoFinished=ramp.saved.finished;autoRotate=ramp.saved.rotate;setPlaying(false);}
+ $('method-ramp').setAttribute('aria-pressed',enabled);$('method-lift').setAttribute('aria-pressed',!enabled);$('tooltip').style.display='none';
+}
+function buildRamp(){
+ const S=new THREE.Scene();S.background=new THREE.Color('#edf0ef');S.environment=scene.environment;S.environmentIntensity=.35;
+ S.add(new THREE.HemisphereLight('#ffffff','#aca99f',1.35));const sun=new THREE.DirectionalLight('#fff9ef',1.6);sun.position.set(1,12,8);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-15,right:15,top:10,bottom:-10,near:1,far:40});sun.shadow.normalBias=.018;S.add(sun);
+ const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.78});const white=mat('#f3f4f2'),steel=mat('#969b9b'),plate=mat('#827d72'),wall=mat('#bdbdb6'),band=mat('#414746');
+ const L=RAMP.rise/Math.tan(RAMP.angle),angle=RAMP.angle;
+ box(S,3,.12,2.2,-1.5,-.06,0,wall);const deck=box(S,RAMP.length,.06,2.2,L/2,RAMP.rise/2-.03*Math.cos(angle),0,plate);deck.rotation.z=angle;
+ box(S,5.35,RAMP.rise,4.6,L+2.675,RAMP.rise/2,.9,wall);
+ // Instanced steel tread pattern, aligned to the actual incline.
+ const textureGroup=new THREE.Group();textureGroup.position.set(L/2,RAMP.rise/2,0);textureGroup.rotation.z=angle;S.add(textureGroup);
+ const tread=new THREE.InstancedMesh(unitBox,steel,1050);let n=0;const d=new THREE.Object3D();for(let i=0;i<105;i++)for(let j=0;j<10;j++){d.position.set(-RAMP.length/2+.04+i*(RAMP.length-.08)/104,.004,-.97+j*.213);d.rotation.set(0,(i+j)%2?.45:-.45,0);d.scale.set(.044,.004,.013);d.updateMatrix();tread.setMatrixAt(n++,d.matrix);}tread.receiveShadow=true;textureGroup.add(tread);
+ box(S,L+.2,2.8,.12,L/2,1.25,-1.19,wall);
+ for(let x=0;x<=L+.1;x+=.87){rod(S,[x,rampFloor(x),1.15],[x,rampFloor(x)+1.02,1.15],.024,steel);}
+ for(const y of[.45,1.02])rod(S,[0,y,1.15],[L,RAMP.rise+y,1.15],.022,steel);
+ // Platform barrier continues clear of the crew's landing space.
+ for(const x of[L,L+1.6,L+3.2,L+5.2])rod(S,[x,RAMP.rise,3.2],[x,RAMP.rise+1.05,3.2],.022,steel);
+ rod(S,[L,RAMP.rise+1.05,3.2],[L+5.2,RAMP.rise+1.05,3.2],.025,steel);
+ for(let x=L;x<L+5.2;x+=.6)for(let z=-1;z<3.1;z+=.6)box(S,.592,.012,.592,x+.3,RAMP.rise+.006,z+.3,mat('#d6d9d6'));
+ // 坡顶平台保持空旷：按用户标注移除三台背景机柜。
+ for(const y of[2.25,2.5])rod(S,[-.5,y,-1.09],[L+4,y,-1.09],.038,steel);
+ for(let x=.3;x<L+3;x+=1.8){box(S,1.1,.11,.19,x,2.38,-.98,white);box(S,1,.024,.12,x,2.32,-.97,new THREE.MeshBasicMaterial({color:'#fffce9'}));}
+ box(S,.09,2.5,.13,-.06,1.25,-1.05,steel);box(S,.09,2.5,.13,-.06,1.25,1.05,steel);box(S,.09,.1,2.23,-.06,2.45,0,steel);
+ const hero=new THREE.Group();S.add(hero);box(hero,1.4,2.25,.6,0,1.125,0,white);
+ for(const x of[-.68,.68])for(const z of[-.28,.28])box(hero,.036,2.25,.036,x,1.125,z,white);
+ const wheels=[];for(const x of[-.60,.60])for(const z of[-.24,.24]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,.032,16),band);w.rotation.x=Math.PI/2;S.add(w);const fork=rod(S,[0,0,0],[0,1,0],.012,steel);wheels.push({mesh:w,fork,x,z});}
+ // One continuous rectangular webbing path: two horizontal wraps, then two free tails.
+ const belt=new THREE.Group();S.add(belt);const pieces=[];for(let i=0;i<9;i++)pieces.push(box(belt,1,.062,.009,0,0,0,band));
+ const tails=[box(S,1,.065,.009,0,0,0,band),box(S,1,.065,.009,0,0,0,band)];
+ const people=[];for(let i=0;i<10;i++){const person=createWorker(i);S.add(person);person.traverse(o=>{if(o.isMesh)o.material=o.material===M.helmet?M.helmet:white;});people.push(person);}
+ ramp={scene:S,hero,wheels,people,pieces,tails,time:0,enabled:false,pullCount:6,handTargets:[]};poseRamp(0);
+}
+function rampStrip(mesh,a,b){const v=new THREE.Vector3(...b).sub(new THREE.Vector3(...a));mesh.position.fromArray(a).addScaledVector(v,.5);mesh.scale.set(v.length(),.065,.009);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),v.normalize());}
+// World-space hand targets are solved explicitly; hands cannot drift away from the strap/frame.
+function poseRampPerson(g,x,z,yaw,targets,phase,role){
+ const y=rampFloor(x);g.position.set(x,y,z);g.rotation.set(0,yaw,0);const D=g.userData,drop=role==='pull'?.15:.07;
+ D.skeleton.position.set(0,-drop,role==='pull'?-.045:role==='push'?.015:0);D.skeleton.rotation.x=role==='pull'?-.07:role==='push'?.065:0;
+ const toLocal=v=>v.clone().sub(g.position).applyAxisAngle(new THREE.Vector3(0,1,0),-yaw);
+ for(const leg of D.legs){const cycle=x/.32+(leg.side===1?.5:0)+D.index*.11,step=Math.floor(cycle),u=cycle-step,swing=Math.max(0,(u-.6)/.4),advance=swing*swing*(3-2*swing);const world=new THREE.Vector3(g.position.x,0,g.position.z).add(new THREE.Vector3(leg.side*.11,0,0).applyAxisAngle(new THREE.Vector3(0,1,0),yaw));world.x+=(step+advance-cycle+.3)*.32;const ankle=toLocal(world);ankle.y=rampFloor(world.x)-y+.09+Math.sin(swing*Math.PI)*.055;const hip=new THREE.Vector3(leg.side*.095,.83-drop,0),knee=bentJoint(hip,ankle,.41,.39,new THREE.Vector3(0,0,1));setBeam(leg.thigh,hip.toArray(),knee.toArray(),.074);setBeam(leg.shin,knee.toArray(),ankle.toArray(),.057);leg.knee.position.copy(knee);leg.foot.position.set(ankle.x,ankle.y-.045,ankle.z+.035);}
+ D.arms.forEach((arm,i)=>{const shoulder=new THREE.Vector3(arm.side*.207,1.28-drop,role==='pull'?-.045:.015),hand=toLocal(targets[i]);const elbow=bentJoint(shoulder,hand,.30,.30,new THREE.Vector3(arm.side*.5,-1,0));arm.shoulder.position.copy(shoulder);arm.joint.position.copy(elbow);arm.hand.position.copy(hand);arm.hand.scale.set(1,.7,role==='pull'?1:1.2);setBeam(arm.upper,shoulder.toArray(),elbow.toArray(),.057);setBeam(arm.fore,elbow.toArray(),hand.clone().add(new THREE.Vector3(0,0,role==='pull'?0:-.05)).toArray(),.047);});
+ poseRefinedHands(g,role==='pull');
+ // Open palms remain parallel to the contacted cabinet frame.
+ if(role!=='pull')for(const arm of D.arms)arm.hand.quaternion.identity();
+}
+function poseRamp(p){
+ const R=ramp,x=THREE.MathUtils.lerp(RAMP.start,RAMP.end,p*p*(3-2*p)),base=rampFloor(x+.6)+.05;R.hero.position.set(x,base,0);R.hero.rotation.set(0,0,0);
+ R.wheels.forEach(w=>{const y=rampFloor(x+w.x);w.mesh.position.set(x+w.x,y+.025,w.z);w.mesh.rotation.y=-p*200;setBeam(w.fork,[x+w.x,y+.025,w.z],[x+w.x,base+.015,w.z],.012);});
+ const y=base+.87,points=[[x+.706,y,-.309],[x-.706,y,-.309],[x-.706,y,.309],[x+.706,y,.309],[x+.714,y,.317],[x-.714,y,.317],[x-.714,y,-.317],[x+.714,y,-.317],[x+.714,y,.325],[x+.706,y,.325]];
+ R.pieces.forEach((m,i)=>rampStrip(m,points[i],points[i+1]));
+ const tailStart=x+.706,tailEnd=x+RAMP.pullOffsets[(R.pullCount||6)/2-1]+.11;
+ const tailY=q=>y+(rampFloor(q)-rampFloor(tailStart));
+ // The two ends stay parallel and unbranched; all six grips lie on these lines.
+ for(let side=0;side<2;side++){const sign=side?1:-1,z=sign*.317;rampStrip(R.tails[side],[tailStart,y,z],[tailEnd,tailY(tailEnd),z]);}
+ R.handTargets=[];const phase=p*70;
+ for(let i=0;i<6;i++){R.people[i].visible=i%3<(R.pullCount||6)/2;const sign=i<3?-1:1,px=x+RAMP.pullOffsets[i%3],z=sign*.56;const targets=[-.08,.08].map(dx=>new THREE.Vector3(px+dx,THREE.MathUtils.lerp(y,tailY(tailEnd),(px+dx-tailStart)/(tailEnd-tailStart)),sign*.317));poseRampPerson(R.people[i],px,z,-Math.PI/2,targets,phase,'pull');R.handTargets.push(targets);}
+ for(let i=0;i<2;i++){const sign=i?1:-1,targets=[-.15,.15].map(dx=>new THREE.Vector3(x+dx,base+1.13,sign*.322));poseRampPerson(R.people[6+i],x,sign*.78,sign===1?Math.PI:0,targets,phase,'steady');R.handTargets.push(targets);}
+ for(let i=0;i<2;i++){const sign=i?1:-1,targets=[.055,-.055].map(dz=>new THREE.Vector3(x-.723,base+1.12,sign*.245+dz));poseRampPerson(R.people[8+i],x-1.04,sign*.49,Math.PI/2,targets,phase,'push');R.handTargets.push(targets);}
+ if(typeof document!=='undefined'){$('tour-progress').style.width=p*100+'%';$('action-label').textContent=p<.92?(R.pullCount||6)+' 人倒退牵引 · 2 人侧扶 · 2 人后推':p<1?'坡顶接应 · 机柜进入静电地板平台':'机柜已通过斜坡进入机房';$('action-counter').textContent=Math.round(p*100)+'%';}
+}
+
+
+// Labels use projected world anchors, keeping construction positions independent of label layout.
+function initRampNotes(){
+ const R=ramp,host=$('ramp-overlay');host.replaceChildren();R.annotationsVisible=true;R.layers={person:true,dimension:true,force:false};R.notes=[];
+ const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');host.append(svg);R.noteSvg=svg;
+ const add=(text,kind,point,dx=0,dy=-20)=>{const el=document.createElement('span');el.className='ramp-note '+kind;el.textContent=text;host.append(el);const line=document.createElementNS(svg.namespaceURI,'line');line.setAttribute('stroke',kind==='force'?'#b96755':'#6f999d');line.setAttribute('stroke-width','1');svg.append(line);R.notes.push({el,line,point,dx,dy});};
+ R.people.forEach((person,i)=>{add(i<6?'牵引':i<8?'侧付':'后推','person',()=>person.localToWorld(new THREE.Vector3(0,1.8,0)),i<3?-30:i<6?38:i===6?-60:45,i<6?-28:20);R.notes.at(-1).person=person;});
+ add('机柜搬运重量 1620 kg','mass',()=>R.hero.position.clone().add(new THREE.Vector3(0,2.4,0)),0,-35);R.massNote=R.notes.at(-1);
+ add('净宽 2.20 m','dimension',()=>new THREE.Vector3(.3,rampFloor(.3)+.05,0),-25,30);
+ add('坡长 5.75 m · θ = 8° / 14.05%','dimension',()=>new THREE.Vector3(2.6,rampFloor(2.6),1.16),0,38);
+ add('高差 0.80 m','dimension',()=>new THREE.Vector3(RAMP.rise/Math.tan(RAMP.angle),RAMP.rise/2,1.15),40,35);
+ add('长边 1.40 m 沿坡向','dimension',()=>R.hero.position.clone().add(new THREE.Vector3(0,.12,.36)),65,40);
+ add('中部绑带 · 人员站位演示','dimension',()=>R.hero.position.clone().add(new THREE.Vector3(.70,.87,0)),65,65);
+ R.forceGroup=new THREE.Group();R.scene.add(R.forceGroup);const theta=RAMP.angle;
+ const defs=[['重力 G = mg',[0,-1,0],0xd56a55],['支持力 N',[-Math.sin(theta),Math.cos(theta),0],0x38a697],['牵引 + 推力',[Math.cos(theta),Math.sin(theta),0],0x407db5],['滚动阻力',[ -Math.cos(theta),-Math.sin(theta),0],0xb68b3f]];
+ R.forceArrows=defs.map(([name,direction,color],i)=>{const arrow=new THREE.ArrowHelper(new THREE.Vector3(...direction),new THREE.Vector3(),i===3?.55:.95,color,.13,.065);R.forceGroup.add(arrow);add(name,'force',()=>arrow.position.clone().addScaledVector(new THREE.Vector3(...direction),i===3?.55:.95),i===2?38:i===3?-45:45,i===0?15:-14);return arrow;});
+ // Dimension lines include both edges of the actual 2.2 m deck.
+ const dimensionMaterial=new THREE.LineBasicMaterial({color:'#348889'});
+ const pts=[[.3,rampFloor(.3)+.018,-1.1],[.3,rampFloor(.3)+.018,1.1]];
+ R.forceGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts.map(p=>new THREE.Vector3(...p))),dimensionMaterial));
+ for(const z of[-1.1,1.1])R.forceGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(.18,rampFloor(.3)+.02,z),new THREE.Vector3(.42,rampFloor(.3)+.02,z)]),dimensionMaterial));
+ updateRampForceText();
+}
+function updateRampForceText(){
+ const mass=Number($('ramp-mass').value),theta=RAMP.angle,valid=Number.isFinite(mass)&&mass>0&&mass<=100000;
+ if(ramp?.massNote)ramp.massNote.el.textContent=valid?'机柜搬运重量 '+mass.toLocaleString()+' kg':'机柜搬运重量：待确认';
+ if(!valid){$('ramp-force-values').textContent='机柜重量待确认；受力箭头仅表示方向。';return;}
+ // User-defined staffing tiers; 1000 and 1500 kg both belong to the middle tier.
+ ramp.pullCount=mass<1000?2:mass<=1500?4:6;
+ $('ramp-crew-title').textContent='人工斜坡搬运 · '+(ramp.pullCount+4)+' 人协同';
+ $('ramp-crew-summary').textContent=ramp.pullCount+' 人倒退牵引（左右各 '+ramp.pullCount/2+' 人） · 2 人侧扶 · 2 人后推';
+ ramp.lastTransportTime=null;renderDirty=true;if(ramp.enabled){poseRamp(Math.min(1,ramp.time/RAMP.duration));updateRampNotes();}
+ const G=mass*9.81/1000,Fg=G*Math.sin(theta),N=G*Math.cos(theta),force=mu=>(Fg+mu*N).toFixed(2);
+ $('ramp-force-values').innerHTML='<b>受力要点</b><br>重力：'+G.toFixed(2)+' kN<br>沿坡下滑分力：<b>'+Fg.toFixed(2)+' kN</b><br>匀速上坡合力：<b>'+force(.02)+'–'+force(.15)+' kN</b><br><small>牵引＋推动合力；滚阻系数 0.02–0.15。</small><hr style="border:0;border-top:1px solid #dde4e6">低位牵引建议：200–400 mm<br><small>简化估算，待实测校核；中部绑带仅示意握持。</small>';
+}
+function updateRampNotes(){
+ const R=ramp;if(!R.notes)return;const host=$('ramp-overlay');host.hidden=!R.annotationsVisible;R.forceGroup.visible=R.annotationsVisible;if(!R.annotationsVisible)return;
+ const x=R.hero.position.x;R.forceArrows.forEach(a=>a.position.set(x,R.hero.position.y+1.04,1.58));
+ // Force diagram is a separate schematic beside the cabinet, not an assumed centre of gravity.
+ const onSlope=x+.6<RAMP.rise/Math.tan(RAMP.angle);R.forceArrows.forEach(a=>a.visible=onSlope&&R.layers.force);
+ R.forceGroup.children.filter(o=>o.isLine).forEach(o=>o.visible=R.layers.dimension);
+ camera.updateMatrixWorld();R.scene.updateMatrixWorld(true);const w=$('viewport').clientWidth,h=$('viewport').clientHeight,rects=[];
+ R.notes.forEach(n=>{const kind=n.el.classList.contains('force')?'force':n.el.classList.contains('person')?'person':'dimension';if(n.person&&!n.person.visible||!R.layers[kind]||kind==='force'&&!onSlope){n.el.hidden=true;n.line.style.display='none';return;}const p=n.point().clone().project(camera),ax=(p.x*.5+.5)*w,ay=(-p.y*.5+.5)*h;
+ const visible=p.z>-1&&p.z<1&&ax>0&&ax<w&&ay>0&&ay<h;n.el.hidden=!visible;n.line.style.display=visible?'':'none';if(!visible)return;
+ const width=n.el.offsetWidth||110;let lx=Math.max(width/2+8,Math.min(w-width/2-8,ax+n.dx)),ly=Math.max(100,Math.min(h-115,ay+n.dy));
+ for(let attempt=0;attempt<15&&rects.some(r=>Math.abs(lx-r.x)<(width+r.width)/2+5&&Math.abs(ly-r.y)<23);attempt++)ly=Math.max(75,ly-25);
+ rects.push({x:lx,y:ly,width});n.el.style.left=lx+'px';n.el.style.top=ly+'px';n.line.setAttribute('x1',ax);n.line.setAttribute('y1',ay);n.line.setAttribute('x2',lx);n.line.setAttribute('y2',ly);
+ });
+}
+
+
+// All playback modes support deterministic seeking; backward seeking resets collision history.
+
+// Repeated transport only: hold on the top platform, then reset for the next cycle.
+function rampFlowLength(){return RAMP.duration+2;}
+function rampFlowPoints(){return [[0,'斜坡搬运'],[RAMP.duration*.72,'坡顶过渡'],[RAMP.duration,'到达坡顶 · 循环等待']];}
+function renderRampFlow(seconds){
+ const R=ramp;
+ if(R.flowPhase!=='ramp'){R.flowPhase='ramp';document.body.classList.remove('ramp-install');rampCamera();}
+ const p=Math.min(1,seconds/RAMP.duration);
+ if(R.lastTransportTime!==seconds){poseRamp(p);R.lastTransportTime=seconds;}
+ if(seconds>=RAMP.duration)$('action-label').textContent='已到达坡顶 · 即将重复搬运';
+ updateRampNotes();
+}
+
+function demoLength(){
+ if(ramp?.enabled)return rampFlowLength();
+ if(pipeline?.enabled){if(!demoLength.pipeline){const S=createPipelineSchedule();while(!S.jobs.every(j=>j.done)&&S.time<600000)advancePipeline(40,S);demoLength.pipeline=S.time;}return demoLength.pipeline/1000;}
+ return STEPS.reduce((n,s)=>n+s.duration,0)/1000;
+}
+function demoTime(){return ramp?.enabled?ramp.time:pipeline?.enabled?pipeline.schedule.time/1000:(STEPS.slice(0,current).reduce((n,s)=>n+s.duration,0)+tourElapsed)/1000;}
+function refreshSeek(){if(typeof document==='undefined'||!document.getElementById)return;const slider=$('seek-time');if(!slider)return;const total=demoLength(),time=demoTime(),key=ramp?.enabled?'ramp':pipeline?.enabled?'pipeline':'single';
+ const fmt=s=>String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');slider.value=String(Math.round(time/total*1000));$('seek-clock').textContent=fmt(time)+' / '+fmt(total);
+ if(refreshSeek.key!==key){refreshSeek.key=key;const points=key==='ramp'?rampFlowPoints():key==='pipeline'?[[0,'并行施工开始'],[total*.33,'流水线 · 前段'],[total*.66,'流水线 · 后段'],[total,'全部安装完成']]:STEPS.map((s,i)=>[STEPS.slice(0,i).reduce((n,v)=>n+v.duration,0)/1000,s.name]);$('jump-action').replaceChildren(...points.map(([value,label])=>{const option=document.createElement('option');option.value=value;option.textContent=label;return option;}));}
+}
+function seekDemo(seconds){if(!loaded)return;setPlaying(false);demoStarted=true;demoFinished=false;const t=THREE.MathUtils.clamp(seconds,0,demoLength());
+ if(ramp?.enabled){ramp.time=t;renderRampFlow(t);}
+ else if(pipeline?.enabled){startPipeline();advancePipeline(t*1000);pipeline.contexts.forEach(I=>{I.safeCabinet=null;I.collisionFrame=null;});renderPipeline();}
+ else{let remaining=t*1000,stage=0;while(stage<7&&remaining>=STEPS[stage].duration){remaining-=STEPS[stage++].duration;}installation.safeCabinet=null;installation.collisionFrame=null;selectStep(stage,false,false);tourElapsed=remaining;applyInstallation(stage,remaining/STEPS[stage].duration);completed=new Set(Array.from({length:stage},(_,i)=>i));renderUI();}
+ demoFinished=t>=demoLength();setPlaying(false);renderDirty=true;refreshSeek();
+}
+
+function animate(now){
+ requestAnimationFrame(animate);if(document.hidden){lastTime=now;return;}const dt=Math.min((now-(lastTime||now))/1000,.05);lastTime=now;
+ if(!playing&&!transition&&!autoRotate&&!renderDirty)return;renderDirty=false;
+ if(ramp?.enabled){if(playing){ramp.time=(ramp.time+dt*playbackRate)%rampFlowLength();demoFinished=false;}else controls.update(dt);renderRampFlow(ramp.time);refreshSeek();renderer.render(ramp.scene,camera);return;}
+ // 过渡时由缓动函数独立驱动镜头，避免 OrbitControls 阻尼叠加到推荐位置。
+ if(transition&&!playing){const t=Math.max(0,Math.min(1,(now-transition.start)/CONFIG.cameraDuration)),ease=easeInOutCubic(t);camera.position.lerpVectors(transition.from,transition.to,ease);controls.target.lerpVectors(transition.fromTarget,transition.toTarget,ease);camera.lookAt(controls.target);camera.userData.span=THREE.MathUtils.lerp(transition.fromSpan,transition.toSpan,ease);camera.zoom=THREE.MathUtils.lerp(transition.fromZoom,1,ease);resize();if(t===1){transition=null;controls.autoRotate=autoRotate&&!playing;}}else if(!playing)controls.update(dt);
+ if(playing&&pipeline?.enabled){advancePipeline(dt*1000*playbackRate);renderPipeline();if(pipeline.schedule.jobs.every(j=>j.done)){demoFinished=true;setPlaying(false);toast('四台机柜流水线施工已完成');}}
+ else if(playing){
+  tourElapsed+=dt*1000*playbackRate;
+  if(tourElapsed>=STEPS[current].duration){applyInstallation(current,1);completed.add(current);const overflow=tourElapsed-STEPS[current].duration;if(current<STEPS.length-1){selectStep(current+1,false,false);tourElapsed=overflow;}else{tourElapsed=STEPS[current].duration;demoFinished=true;renderUI();setPlaying(false);toast('八道施工工序演示已完成');}}
+  applyInstallation(current,Math.min(1,tourElapsed/STEPS[current].duration));
+ }
+ $('tour-progress').style.width=Math.min(100,tourElapsed/STEPS[current].duration*100)+'%';
+ // 播放时保留开始演示时的相机位置、目标和缩放；不跟随或逐步切镜。
+
+ const time=now/1000;for(const marker of anchorMarkers)marker.ring.quaternion.copy(camera.quaternion);
+ // 锚点保持静态，仅让标记面朝相机；流体粒子保持原有流动效果。
+ const flow=scene.userData.flow;if(flow){const arr=flow.geometry.attributes.position.array;flow.points.forEach((p,i)=>p.curve.getPointAt((time*p.speed+p.phase)%1).toArray(arr,i*3));flow.geometry.attributes.position.needsUpdate=true;}
+ refreshSeek();updatePipelineLabels();updateAnchors();updateCabinetVisibility();renderer.render(scene,camera);renderFixingDetail();
+}
+function updateAnchors(){if(!labelsVisible)return;const w=$('viewport').clientWidth,h=$('viewport').clientHeight;const placed=[];anchors.sort((a,b)=>(b.step===current)-(a.step===current)).forEach(a=>{a.projected.copy(a.position);a.projected.y+=.32;a.projected.project(camera);const x=(a.projected.x*.5+.5)*w,y=(-a.projected.y*.5+.5)*h;const visible=a.projected.z>-1&&a.projected.z<1&&x>25&&x<w-25&&y>95&&y<h-96;a.el.style.display=visible?'':'none';if(!visible)return;let offset=0;for(const r of placed)if(Math.abs(x-r.x)<124&&Math.abs(y+offset-r.y)<35)offset-=36;const top=Math.max(100,y+offset);a.el.style.left=x+'px';a.el.style.top=top+'px';a.el.style.setProperty('--offset',Math.abs(offset)+'px');a.el.classList.toggle('faded',a.step!==current&&!!transition);placed.push({x,y:top});});}
+</script>
+</body>
+</html>
